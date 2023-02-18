@@ -42,32 +42,15 @@ public class Main extends JPanel {
 			public void keyPressed(GlobalKeyEvent arg0) {
 				int key = arg0.getVirtualKeyCode();
 				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && macro.keyboard) {
-					if (macro.work.start) {
-						macro.work.start = false;
-
-						macro.work.changeKey.setEnabled(true);
-						macro.work.auto.setEnabled(true);
-						macro.work.CBmenu.setEnabled(true);
-						macro.work.CBmenu2.setEnabled(true);
-						macro.work.executorService.shutdown();
-					} else {
-						macro.work.start();
-					}
+					startOrStop(macro);
 				}
 
 				if (macro.work.changing && key != 27 && key != 32) {
-					macro.work.keycode = key;
-					macro.work.changing = false;
-					macro.work.changeKey.setEnabled(true);
-					macro.work.keycode_l.setText(arg0.getKeyChar() + " (키코드: " + key + ")");
-					macro.keyboard = true;
-					macro.work.dialog.setVisible(false);
+					changeKeyCode(macro, key, arg0.getKeyChar(), "키코드", true);
 				}
 
 				if (macro.work.changing && (key == 27 || key == 32)) {
-					macro.work.changing = false;
-					macro.work.changeKey.setEnabled(true);
-					macro.work.dialog.setVisible(false);
+					cancelChangeKeyCode(macro);
 				}
 			} // KeyPressed
 
@@ -83,32 +66,15 @@ public class Main extends JPanel {
 			public void mousePressed(GlobalMouseEvent arg0) {
 				int key = arg0.getButton();
 				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && !macro.keyboard) {
-					if (macro.work.start) {
-						macro.work.start = false;
-
-						macro.work.changeKey.setEnabled(true);
-						macro.work.auto.setEnabled(true);
-						macro.work.CBmenu.setEnabled(true);
-						macro.work.CBmenu2.setEnabled(true);
-						macro.work.executorService.shutdown();
-					} else {
-						macro.work.start();
-					}
+					startOrStop(macro);
 				}
 
 				if (macro.work.changing && key != 1) {
-					macro.work.keycode = key;
-					macro.work.changing = false;
-					macro.work.changeKey.setEnabled(true);
-					macro.work.keycode_l.setText(" (마우스 버튼 코드: " + key + ")");
-					macro.keyboard = false;
-					macro.work.dialog.setVisible(false);
+					changeKeyCode(macro, key, ' ',"마우스 버튼 코드", false);
 				}
 
 				if (macro.work.changing && key == 1) {
-					macro.work.changing = false;
-					macro.work.changeKey.setEnabled(true);
-					macro.work.dialog.setVisible(false);
+					cancelChangeKeyCode(macro);
 				}
 			} // mousePressed()
 			
@@ -118,4 +84,33 @@ public class Main extends JPanel {
 			} //mouseReleased()
 		}); //mouseListener
 	} // main
+
+	private static void startOrStop(Main macro) {
+		if (macro.work.start) {
+			macro.work.start = false;
+			macro.work.changeKey.setEnabled(true);
+			macro.work.auto.setEnabled(true);
+			macro.work.help.setEnabled(true);
+			macro.work.CBmenu.setEnabled(true);
+			macro.work.CBmenu2.setEnabled(true);
+			macro.work.executorService.shutdown();
+		} else {
+			macro.work.start();
+		}
+	}
+
+	private static void changeKeyCode(Main macro, int keycode, char key, String label, boolean keyboard) {
+		macro.work.keycode = keycode;
+		macro.work.changing = false;
+		macro.work.changeKey.setEnabled(true);
+		macro.work.keycode_l.setText(key + " (" + label+": " + keycode + ")");
+		macro.keyboard = keyboard;
+		macro.work.dialog.setVisible(false);
+	}
+
+	private static void cancelChangeKeyCode(Main macro){
+		macro.work.changing = false;
+		macro.work.changeKey.setEnabled(true);
+		macro.work.dialog.setVisible(false);
+	}
 } // Main
