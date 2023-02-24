@@ -128,11 +128,11 @@ public class DesignAndWork extends JPanel {
             return;
         }
         long delay = Long.parseLong(text);
-        if (delay >= 5000) {
-            JOptionPane.showMessageDialog(null, "지연 설정이 5000보다 작아야 합니다.", "Mouse Delay Setting Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+//        if (delay >= 5000) {
+//            JOptionPane.showMessageDialog(null, "지연 설정이 5000보다 작아야 합니다.", "Mouse Delay Setting Error",
+//                    JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
         //유효성 검사 끝
 
         //초기화 시작

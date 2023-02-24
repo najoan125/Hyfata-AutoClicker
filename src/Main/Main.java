@@ -24,7 +24,7 @@ public class Main extends JPanel {
 	public static void main(String[] args) {
 		Main macro = new Main();
 		//frame
-		JFrame frame = new JFrame("HF AutoClick 1.1.1");
+		JFrame frame = new JFrame("HF AutoClick 1.1.2");
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image img = toolkit.getImage(Main.class.getResource("/img/HF_AutoClickIcon.png"));
 		frame.setIconImage(img);
