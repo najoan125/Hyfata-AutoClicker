@@ -2,6 +2,7 @@ package Main;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.Objects;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,6 +18,8 @@ public class Main extends JPanel {
 	DesignAndWork work = new DesignAndWork();
 	boolean keyboard = true;
 
+	boolean isPressed = false;
+
 	public Main() {
 		work.design();
 	}
@@ -24,12 +27,12 @@ public class Main extends JPanel {
 	public static void main(String[] args) {
 		Main macro = new Main();
 		//frame
-		JFrame frame = new JFrame("HF AutoClick 1.1.2");
+		JFrame frame = new JFrame("HF AutoClick 1.2.0");
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image img = toolkit.getImage(Main.class.getResource("/img/HF_AutoClickIcon.png"));
 		frame.setIconImage(img);
 		frame.getContentPane().add(macro.work);// JFrame+JPanel(화면디자인)
-		frame.setBounds(100, 300, 300, 255);// x,y,w,h
+		frame.setBounds(100, 300, 300, 280);// x,y,w,h
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// X버튼 클릭시 종료
 		frame.setFocusable(true);
@@ -41,8 +44,19 @@ public class Main extends JPanel {
 			@Override
 			public void keyPressed(GlobalKeyEvent arg0) {
 				int key = arg0.getVirtualKeyCode();
+				String pt = Objects.requireNonNull(macro.work.CBmenu3.getSelectedItem()).toString();
+				if (Objects.equals(pt, "누르기") && !macro.isPressed && macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && macro.keyboard) {
+					startOrStop(macro);
+					macro.isPressed = true;
+				}
+			} // KeyPressed
+
+			@Override
+			public void keyReleased(GlobalKeyEvent arg0) {
+				int key = arg0.getVirtualKeyCode();
 				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && macro.keyboard) {
 					startOrStop(macro);
+					macro.isPressed = false;
 				}
 
 				if (macro.work.changing && key != 27 && key != 32) {
@@ -52,11 +66,6 @@ public class Main extends JPanel {
 				if (macro.work.changing && (key == 27 || key == 32)) {
 					cancelChangeKeyCode(macro);
 				}
-			} // KeyPressed
-
-			@Override
-			public void keyReleased(GlobalKeyEvent arg0) {
-
 			} // KeyReleaed
 		}); // addkeylistener
 		
@@ -64,6 +73,15 @@ public class Main extends JPanel {
 		mouseHook.addMouseListener(new GlobalMouseAdapter() {
 			@Override
 			public void mousePressed(GlobalMouseEvent arg0) {
+				int key = arg0.getButton();
+				String pt = Objects.requireNonNull(macro.work.CBmenu3.getSelectedItem()).toString();
+				if (Objects.equals(pt, "누르기") && macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && !macro.keyboard) {
+					startOrStop(macro);
+				}
+			} // mousePressed()
+			
+			@Override
+			public void mouseReleased(GlobalMouseEvent arg0) {
 				int key = arg0.getButton();
 				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && !macro.keyboard) {
 					startOrStop(macro);
@@ -76,11 +94,6 @@ public class Main extends JPanel {
 				if (macro.work.changing && key == 1) {
 					cancelChangeKeyCode(macro);
 				}
-			} // mousePressed()
-			
-			@Override
-			public void mouseReleased(GlobalMouseEvent arg0) {
-				
 			} //mouseReleased()
 		}); //mouseListener
 	} // main
@@ -93,6 +106,7 @@ public class Main extends JPanel {
 			macro.work.help.setEnabled(true);
 			macro.work.CBmenu.setEnabled(true);
 			macro.work.CBmenu2.setEnabled(true);
+			macro.work.CBmenu3.setEnabled(true);
 			macro.work.executorService.shutdown();
 		} else {
 			macro.work.start();
