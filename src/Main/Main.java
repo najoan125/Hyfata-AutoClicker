@@ -1,20 +1,25 @@
 package Main;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.util.Objects;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import lc.kra.system.keyboard.GlobalKeyboardHook;
 import lc.kra.system.keyboard.event.GlobalKeyEvent;
 import lc.kra.system.keyboard.event.GlobalKeyListener;
 import lc.kra.system.mouse.GlobalMouseHook;
 import lc.kra.system.mouse.event.GlobalMouseAdapter;
 import lc.kra.system.mouse.event.GlobalMouseEvent;
+import org.json.JSONObject;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.Objects;
 
 public class Main extends JPanel {
 	private static final long serialVersionUID = 1L;
+	private static final String appVersion = "1.2.1";
 	DesignAndWork work = new DesignAndWork();
 	boolean keyboard = true;
 
@@ -24,15 +29,78 @@ public class Main extends JPanel {
 		work.design();
 	}
 
+
+	public static String stream(URL url) {
+		try (InputStream input = url.openStream()) {
+			InputStreamReader isr = new InputStreamReader(input);
+			BufferedReader reader = new BufferedReader(isr);
+			StringBuilder json = new StringBuilder();
+			int c;
+			while ((c = reader.read()) != -1) {
+				json.append((char) c);
+			}
+			return json.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public static void downloadUpdate(String version){
+		String home = System.getProperty("user.home");
+		String file = home+"/Downloads/" + "Hyfata.AutoClick "+version+".exe";
+
+		String addr = "https://github.com/najoan125/Hyfata-AutoClicker/releases/download/"+version+"/Hyfata.AutoClick.exe";
+		try{
+			URL url = new URL(addr);
+			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+			FileOutputStream fos = new FileOutputStream(file);
+
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			fos.close();
+
+			Runtime.getRuntime().exec(file);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
+		//update - start
+		String json = "";
+		try{
+			URL url = new URL("http://132.226.170.151/file/Autoclicker/autoclicker.json");
+			json = stream(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		if (!json.equals("")) {
+			JSONObject jObject = new JSONObject(json);
+			String latest = jObject.getString("latest-version");
+			String desc = jObject.getString("description");
+
+			if (!latest.equals(appVersion)) {
+				int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+								+ "\n변경된 내용: " + desc,
+						"업데이트 발견!",
+						JOptionPane.YES_NO_OPTION);
+				if (answer == JOptionPane.YES_OPTION) {
+					downloadUpdate(latest);
+					return;
+				}
+			}
+		}
+		//update - end
+
 		Main macro = new Main();
 		//frame
-		JFrame frame = new JFrame("HF AutoClick 1.2.0");
+		JFrame frame = new JFrame("HF AutoClick "+appVersion);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image img = toolkit.getImage(Main.class.getResource("/img/HF_AutoClickIcon.png"));
 		frame.setIconImage(img);
 		frame.getContentPane().add(macro.work);// JFrame+JPanel(화면디자인)
-		frame.setBounds(100, 300, 300, 280);// x,y,w,h
+		frame.setBounds(300, 300, 300, 300);// x,y,w,h
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// X버튼 클릭시 종료
 		frame.setFocusable(true);
