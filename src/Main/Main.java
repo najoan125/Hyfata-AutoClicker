@@ -1,11 +1,7 @@
 package Main;
 
-import lc.kra.system.keyboard.GlobalKeyboardHook;
-import lc.kra.system.keyboard.event.GlobalKeyEvent;
-import lc.kra.system.keyboard.event.GlobalKeyListener;
-import lc.kra.system.mouse.GlobalMouseHook;
-import lc.kra.system.mouse.event.GlobalMouseAdapter;
-import lc.kra.system.mouse.event.GlobalMouseEvent;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -15,24 +11,74 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
 
 public class Main extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private static final String appVersion = "1.2.1";
-	DesignAndWork work = new DesignAndWork();
-	boolean keyboard = true;
+	private static final String appVersion = "1.2.2";
+	static DesignAndWork work = new DesignAndWork();
 
-	boolean isPressed = false;
 
-	public Main() {
+	public static void main(String[] args) {
+		//update - start
+		String json = "";
+		try{
+			URL url = new URL("http://132.226.170.151/file/Autoclicker/autoclicker.json");
+			json = stream(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		if (!json.equals("")) {
+			JSONObject jObject = new JSONObject(json);
+			String latest = jObject.getString("latest-version");
+			String desc = jObject.getString("description");
+
+			if (!latest.equals(appVersion)) {
+				int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+								+ "\n변경된 내용: " + desc,
+						"업데이트 발견!",
+						JOptionPane.YES_NO_OPTION);
+				if (answer == JOptionPane.YES_OPTION) {
+					downloadUpdate(latest);
+					return;
+				}
+			}
+		}
+		//update - end
+
+		//register
+		try {
+			GlobalScreen.registerNativeHook();
+		}
+		catch (NativeHookException ex) {
+			System.err.println("There was a problem registering the native hook.");
+			System.err.println(ex.getMessage());
+			JOptionPane.showMessageDialog(null, "NativeHook를 등록하는 과정에서 오류가 발생했습니다!\n제작자에게 디스코드로 문의해주세요!\nDiscord Tag: Najoan#0135",
+					"오류 발생",JOptionPane.INFORMATION_MESSAGE);
+			System.exit(1);
+		}
+		GlobalScreen.addNativeKeyListener(new GlobalKeyListener());
+		GlobalScreen.addNativeMouseListener(new GlobalKeyListener());
+		//register
+
 		work.design();
-	}
-
+		//frame
+		JFrame frame = new JFrame("HF AutoClick "+appVersion);
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image img = toolkit.getImage(Main.class.getResource("/img/HF_AutoClickIcon.png"));
+		frame.setIconImage(img);
+		frame.getContentPane().add(work);// JFrame+JPanel(화면디자인)
+		frame.setBounds(300, 300, 300, 300);// x,y,w,h
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// X버튼 클릭시 종료
+		frame.setFocusable(true);
+		frame.setResizable(false);
+		//frame
+	} // main
 
 	public static String stream(URL url) {
 		try (InputStream input = url.openStream()) {
-			InputStreamReader isr = new InputStreamReader(input);
+			InputStreamReader isr = new InputStreamReader(input, StandardCharsets.UTF_8);
 			BufferedReader reader = new BufferedReader(isr);
 			StringBuilder json = new StringBuilder();
 			int c;
@@ -66,133 +112,4 @@ public class Main extends JPanel {
 		}
 	}
 
-	public static void main(String[] args) {
-		//update - start
-		String json = "";
-		try{
-			URL url = new URL("http://132.226.170.151/file/Autoclicker/autoclicker.json");
-			json = stream(url);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		if (!json.equals("")) {
-			JSONObject jObject = new JSONObject(json);
-			String latest = jObject.getString("latest-version");
-			String desc = jObject.getString("description");
-
-			if (!latest.equals(appVersion)) {
-				int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
-								+ "\n변경된 내용: " + desc,
-						"업데이트 발견!",
-						JOptionPane.YES_NO_OPTION);
-				if (answer == JOptionPane.YES_OPTION) {
-					downloadUpdate(latest);
-					return;
-				}
-			}
-		}
-		//update - end
-
-		Main macro = new Main();
-		//frame
-		JFrame frame = new JFrame("HF AutoClick "+appVersion);
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image img = toolkit.getImage(Main.class.getResource("/img/HF_AutoClickIcon.png"));
-		frame.setIconImage(img);
-		frame.getContentPane().add(macro.work);// JFrame+JPanel(화면디자인)
-		frame.setBounds(300, 300, 300, 300);// x,y,w,h
-		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// X버튼 클릭시 종료
-		frame.setFocusable(true);
-		frame.setResizable(false);
-		//frame
-		
-		GlobalKeyboardHook keyboardHook = new GlobalKeyboardHook();
-		keyboardHook.addKeyListener(new GlobalKeyListener() {
-			@Override
-			public void keyPressed(GlobalKeyEvent arg0) {
-				int key = arg0.getVirtualKeyCode();
-				String pt = Objects.requireNonNull(macro.work.CBmenu3.getSelectedItem()).toString();
-				if (Objects.equals(pt, "누르기") && !macro.isPressed && macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && macro.keyboard) {
-					startOrStop(macro);
-					macro.isPressed = true;
-				}
-			} // KeyPressed
-
-			@Override
-			public void keyReleased(GlobalKeyEvent arg0) {
-				int key = arg0.getVirtualKeyCode();
-				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && macro.keyboard) {
-					startOrStop(macro);
-					macro.isPressed = false;
-				}
-
-				if (macro.work.changing && key != 27 && key != 32) {
-					changeKeyCode(macro, key, arg0.getKeyChar(), "키코드", true);
-				}
-
-				if (macro.work.changing && (key == 27 || key == 32)) {
-					cancelChangeKeyCode(macro);
-				}
-			} // KeyReleaed
-		}); // addkeylistener
-		
-		GlobalMouseHook mouseHook = new GlobalMouseHook();
-		mouseHook.addMouseListener(new GlobalMouseAdapter() {
-			@Override
-			public void mousePressed(GlobalMouseEvent arg0) {
-				int key = arg0.getButton();
-				String pt = Objects.requireNonNull(macro.work.CBmenu3.getSelectedItem()).toString();
-				if (Objects.equals(pt, "누르기") && macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && !macro.keyboard) {
-					startOrStop(macro);
-				}
-			} // mousePressed()
-			
-			@Override
-			public void mouseReleased(GlobalMouseEvent arg0) {
-				int key = arg0.getButton();
-				if (macro.work.keycode != null && key == macro.work.keycode && !macro.work.changing && !macro.keyboard) {
-					startOrStop(macro);
-				}
-
-				if (macro.work.changing && key != 1) {
-					changeKeyCode(macro, key, ' ',"마우스 버튼 코드", false);
-				}
-
-				if (macro.work.changing && key == 1) {
-					cancelChangeKeyCode(macro);
-				}
-			} //mouseReleased()
-		}); //mouseListener
-	} // main
-
-	private static void startOrStop(Main macro) {
-		if (macro.work.start) {
-			macro.work.start = false;
-			macro.work.changeKey.setEnabled(true);
-			macro.work.auto.setEnabled(true);
-			macro.work.help.setEnabled(true);
-			macro.work.CBmenu.setEnabled(true);
-			macro.work.CBmenu2.setEnabled(true);
-			macro.work.CBmenu3.setEnabled(true);
-			macro.work.executorService.shutdown();
-		} else {
-			macro.work.start();
-		}
-	}
-
-	private static void changeKeyCode(Main macro, int keycode, char key, String label, boolean keyboard) {
-		macro.work.keycode = keycode;
-		macro.work.changing = false;
-		macro.work.changeKey.setEnabled(true);
-		macro.work.keycode_l.setText(key + " (" + label+": " + keycode + ")");
-		macro.keyboard = keyboard;
-		macro.work.dialog.setVisible(false);
-	}
-
-	private static void cancelChangeKeyCode(Main macro){
-		macro.work.changing = false;
-		macro.work.changeKey.setEnabled(true);
-		macro.work.dialog.setVisible(false);
-	}
 } // Main

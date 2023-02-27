@@ -5,6 +5,8 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -117,6 +119,37 @@ public class DesignAndWork extends JPanel {
         };
         this.changeKey.addActionListener(changeKey);
 
+        KeyListener keyType = new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c)) {
+                    e.consume();
+                }
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                String text = auto.getText();
+                if (text.startsWith("0")){
+                    auto.setText("1");
+                }
+                if (text.isEmpty()){
+                    auto.setText("1");
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = auto.getText();
+                if (text.startsWith("0")){
+                    auto.setText("1");
+                }
+                if (text.isEmpty()){
+                    auto.setText("1");
+                }
+            }
+        };
+        this.auto.addKeyListener(keyType);
+
         // listener -----------------
         ActionListener help = e -> JOptionPane.showMessageDialog(null,
                 "누르기 / 토글 에서\n \"누르기\" 로 설정한 경우, \n설정한 조작 키를 누르고 있는 동안 자동 클릭이 작동하며, \n키를 때는 순간 자동 클릭이 멈춥니다." +
@@ -124,26 +157,10 @@ public class DesignAndWork extends JPanel {
                 "도움말", JOptionPane.INFORMATION_MESSAGE);
         this.help.addActionListener(help);
     } // design()
-
     public void start() {
         //유효성 검사 시작
-        final String REGEX = "[0-9]+";
         String text = auto.getText();
-        if (!text.matches(REGEX)) {
-            JOptionPane.showMessageDialog(null, "지연 설정에 숫자만 입력하세요.", "Mouse Delay Setting Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        } else if (text.startsWith("0")) {
-            JOptionPane.showMessageDialog(null, "지연 설정이 0으로 시작해서는 안됩니다.", "Mouse Delay Setting Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
         long delay = Long.parseLong(text);
-//        if (delay >= 5000) {
-//            JOptionPane.showMessageDialog(null, "지연 설정이 5000보다 작아야 합니다.", "Mouse Delay Setting Error",
-//                    JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
         //유효성 검사 끝
 
         //초기화 시작
