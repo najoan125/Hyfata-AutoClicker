@@ -33,13 +33,12 @@ public class DesignAndWork extends JPanel {
     JTextField auto; //지연 설정 입력란
     JButton changeKey; //조작 키 변경 버튼
     JButton help; //도움말 버튼
-    JComboBox<String> CBmenu = new JComboBox<>();
-    JComboBox<String> CBmenu2 = new JComboBox<>();
-    JComboBox<String> CBmenu3 = new JComboBox<>();
-    JOptionPane pane = new JOptionPane("키 인식 중입니다...\nESC를 눌러 취소할 수 있습니다.", JOptionPane.INFORMATION_MESSAGE,
-            JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
-    JDialog dialog = pane.createDialog("키 인식 중...");
-    JLabel keycode_l = new JLabel("지정되지 않음"); //GUI 키코드 라벨
+    JComboBox<String> CBmenu;
+    JComboBox<String> CBmenu2;
+    JComboBox<String> CBmenu3;
+    JOptionPane pane;
+    JDialog dialog;
+    JLabel keycode_l; //GUI 키코드 라벨
     //GUI 관련 변수들 - end
 
     boolean start = false; //자동 클릭 매크로 작동 여부
@@ -53,6 +52,14 @@ public class DesignAndWork extends JPanel {
 
     //GUI 및 GUI 버튼 리스너
     public void design() {
+        CBmenu = new JComboBox<>();
+        CBmenu2 = new JComboBox<>();
+        CBmenu3 = new JComboBox<>();
+        pane = new JOptionPane("키 인식 중입니다...\nESC를 눌러 취소할 수 있습니다.", JOptionPane.INFORMATION_MESSAGE,
+                JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+        dialog = pane.createDialog("키 인식 중...");
+        keycode_l = new JLabel("지정되지 않음");
+
         //디자인 시작
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -69,15 +76,15 @@ public class DesignAndWork extends JPanel {
 
         String[] CBmenu_1 = {"왼쪽", "가운데", "오른쪽"};
         CBmenu = new JComboBox<>(CBmenu_1);
-        CBmenu.setPreferredSize(new Dimension(80, 20));
+        CBmenu.setPreferredSize(new Dimension(80, 23));
 
         String[] CBmenu_2 = {"밀리초(ms)", "마이크로초(μs)"};
         CBmenu2 = new JComboBox<>(CBmenu_2);
-        CBmenu2.setPreferredSize(new Dimension(150, 20));
+        CBmenu2.setPreferredSize(new Dimension(150, 23));
 
         String[] CBmenu_3 = {"누르기", "토글"};
         CBmenu3 = new JComboBox<>(CBmenu_3);
-        CBmenu3.setPreferredSize(new Dimension(80, 20));
+        CBmenu3.setPreferredSize(new Dimension(80, 23));
 
         auto = new JTextField("100", 5);
         changeKey = new JButton("조작 키 변경");
