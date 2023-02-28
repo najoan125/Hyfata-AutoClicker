@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -16,10 +18,10 @@ import java.util.Objects;
 
 public class Main extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final String appVersion = "1.2.3";
+    private static final String appVersion = "1.2.2";
     static DesignAndWork work = new DesignAndWork();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws URISyntaxException, IOException {
         customFont(); //기본 폰트 변경
         //update - start
         String json = "";
@@ -35,13 +37,28 @@ public class Main extends JPanel {
             String desc = jObject.getString("description");
 
             if (!latest.equals(appVersion)) {
-                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
-                                + "\n변경된 내용: " + desc,
-                        "업데이트 발견!",
-                        JOptionPane.YES_NO_OPTION);
-                if (answer == JOptionPane.YES_OPTION) {
-                    downloadUpdate(latest);
-                    return;
+                if (OSValidator.isWindows()) {
+                    int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+                                    + "\n변경된 내용: " + desc,
+                            "업데이트 발견!",
+                            JOptionPane.YES_NO_OPTION);
+                    if (answer == JOptionPane.YES_OPTION) {
+                        downloadUpdate(latest);
+                        return;
+                    }
+                } else {
+                    int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 최신 버전을 다운받으시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+                                    + "\n변경된 내용: " + desc,
+                            "업데이트 발견!",
+                            JOptionPane.YES_NO_OPTION);
+                    if (answer == JOptionPane.YES_OPTION) {
+                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                            Desktop.getDesktop().browse(new URI("https://github.com/najoan125/Hyfata-AutoClicker/releases/download/" + latest + "/AutoClicker.jar"));
+                        } else
+                            JOptionPane.showMessageDialog(null, "아쉽게도 이 장치는 지원되지 않습니다. 업데이트를 직접 설치해주세요.",
+                                    "오류 발생", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
                 }
             }
         }
@@ -94,7 +111,7 @@ public class Main extends JPanel {
 
     public static void downloadUpdate(String version) {
         String home = System.getProperty("user.home");
-        String file = home + "/Downloads/" + "Hyfata.AutoClick " + version + ".exe";
+        String file = home + "/Downloads/" + "Hyfata.AutoClick." + version + ".exe";
 
         String addr = "https://github.com/najoan125/Hyfata-AutoClicker/releases/download/" + version + "/Hyfata.AutoClick.exe";
         try {
