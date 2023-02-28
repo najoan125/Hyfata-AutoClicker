@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class Main extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final String appVersion = "1.2.4";
+    private static final String appVersion = "1.2.5";
     static DesignAndWork work = new DesignAndWork();
 
     public static void main(String[] args) throws URISyntaxException, IOException {

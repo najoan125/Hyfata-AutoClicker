@@ -5,6 +5,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 
+import java.awt.*;
 import java.util.Objects;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
@@ -29,7 +30,13 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         }
 
         if (Main.work.changing && key != NativeKeyEvent.VC_ESCAPE) {
-            changeKeyCode(key, NativeKeyEvent.getKeyText(key), "키코드", true);
+            String keychar = NativeKeyEvent.getKeyText(key);
+            if (keychar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))){
+                changeKeyCode(key, "", "키코드", true);
+            }
+            else {
+                changeKeyCode(key, keychar, "키코드", true);
+            }
         }
 
         if (Main.work.changing && key == NativeKeyEvent.VC_ESCAPE) {
@@ -55,7 +62,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         }
 
         if (Main.work.changing && key != 1) {
-            changeKeyCode(key, " ","마우스 버튼 코드", false);
+            changeKeyCode(key, "","마우스 버튼 코드", false);
         }
 
         if (Main.work.changing && key == 1) {
