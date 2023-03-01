@@ -2,11 +2,11 @@ package Main;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.text.NumberFormat;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,7 +30,7 @@ public class DesignAndWork extends JPanel {
     }
 
     //GUI 관련 변수들 - start
-    JTextField auto; //지연 설정 입력란
+    JFormattedTextField auto; //지연 설정 입력란
     JButton changeKey; //조작 키 변경 버튼
     JButton help; //도움말 버튼
     JComboBox<String> CBmenu;
@@ -86,7 +86,19 @@ public class DesignAndWork extends JPanel {
         CBmenu3 = new JComboBox<>(CBmenu_3);
         CBmenu3.setPreferredSize(new Dimension(80, 23));
 
-        auto = new JTextField("100", 5);
+        //delay setting
+        NumberFormat format = NumberFormat.getInstance();
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Long.class);
+        formatter.setMinimum(1L);
+        formatter.setMaximum(Long.MAX_VALUE);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);
+        auto = new JFormattedTextField(formatter);
+        auto.setPreferredSize(new Dimension(80, 23));
+        auto.setValue(100);
+        //delay setting
+
         changeKey = new JButton("조작 키 변경");
         help = new JButton("도움말");
 
@@ -116,7 +128,7 @@ public class DesignAndWork extends JPanel {
         AutoPn.add(cPn5);
         this.add(AutoPn);
         //디자인 끝
-        
+
         // listener
         ActionListener changeKey = e -> {
             DesignAndWork.this.changeKey.setEnabled(false);
@@ -126,37 +138,6 @@ public class DesignAndWork extends JPanel {
         };
         this.changeKey.addActionListener(changeKey);
 
-        KeyListener keyType = new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c)) {
-                    e.consume();
-                }
-            }
-            @Override
-            public void keyPressed(KeyEvent e) {
-                String text = auto.getText();
-                if (text.startsWith("0")){
-                    auto.setText("1");
-                }
-                if (text.isEmpty()){
-                    auto.setText("1");
-                }
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String text = auto.getText();
-                if (text.startsWith("0")){
-                    auto.setText("1");
-                }
-                if (text.isEmpty()){
-                    auto.setText("1");
-                }
-            }
-        };
-        this.auto.addKeyListener(keyType);
-
         // listener -----------------
         ActionListener help = e -> JOptionPane.showMessageDialog(null,
                 "누르기 / 토글 에서\n \"누르기\" 로 설정한 경우, \n설정한 조작 키를 누르고 있는 동안 자동 클릭이 작동하며, \n키를 때는 순간 자동 클릭이 멈춥니다." +
@@ -164,13 +145,10 @@ public class DesignAndWork extends JPanel {
                 "도움말", JOptionPane.INFORMATION_MESSAGE);
         this.help.addActionListener(help);
     } // design()
-    public void start() {
-        //유효성 검사 시작
-        String text = auto.getText();
-        long delay = Long.parseLong(text);
-        //유효성 검사 끝
 
+    public void start() {
         //초기화 시작
+        long delay = Long.parseLong(auto.getValue().toString());
         CBmenu.setEnabled(false);
         CBmenu2.setEnabled(false);
         CBmenu3.setEnabled(false);
@@ -195,25 +173,42 @@ public class DesignAndWork extends JPanel {
             right = true;
 
         //자동 클릭 매크로 시작
-        if (Objects.equals(delayAuto, "밀리초(ms)"))
-            executorService.scheduleAtFixedRate(this::startMacro, 0, delay,
-                    TimeUnit.MILLISECONDS);
-        else if (Objects.equals(delayAuto, "마이크로초(μs)"))
-            executorService.scheduleAtFixedRate(this::startMacro, 0, delay,
-                    TimeUnit.MICROSECONDS);
+        if (Objects.equals(delayAuto, "밀리초(ms)")) {
+            if (left)
+                executorService.scheduleAtFixedRate(this::startMacroLeft, 0, delay,
+                        TimeUnit.MILLISECONDS);
+            else if (middle)
+                executorService.scheduleAtFixedRate(this::startMacroMiddle, 0, delay,
+                        TimeUnit.MILLISECONDS);
+            else if (right)
+                executorService.scheduleAtFixedRate(this::startMacroRight, 0, delay,
+                        TimeUnit.MILLISECONDS);
+        } else if (Objects.equals(delayAuto, "마이크로초(μs)")) {
+            if (left)
+                executorService.scheduleAtFixedRate(this::startMacroLeft, 0, delay,
+                        TimeUnit.MICROSECONDS);
+            else if (middle)
+                executorService.scheduleAtFixedRate(this::startMacroMiddle, 0, delay,
+                        TimeUnit.MICROSECONDS);
+            else if (right)
+                executorService.scheduleAtFixedRate(this::startMacroRight, 0, delay,
+                        TimeUnit.MICROSECONDS);
+        }
     } // start()
 
     //자동 클릭 매크로 실행(메서드 반복)
-    public void startMacro() {
-        if (left) {
-            r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-            r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        } else if (middle) {
-            r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
-            r.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
-        } else if (right) {
-            r.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-            r.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-        }
+    public void startMacroLeft() {
+        r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+        r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+    }
+
+    private void startMacroRight() {
+        r.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+        r.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+    }
+
+    private void startMacroMiddle() {
+        r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
+        r.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
     }
 }
