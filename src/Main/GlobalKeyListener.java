@@ -9,10 +9,11 @@ import java.awt.*;
 import java.util.Objects;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
-    boolean isPressed = false;
-    boolean keyboard = true;
+    static boolean isPressed = false;
+    static boolean keyboard = true;
 
     //keyboard
+    @Override
     public void nativeKeyPressed(NativeKeyEvent e){
         int key = e.getKeyCode();
         String pt = Objects.requireNonNull(Main.work.CBmenu3.getSelectedItem()).toString();
@@ -91,7 +92,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         Main.work.changing = false;
         Main.work.changeKey.setEnabled(true);
         Main.work.keycode_l.setText(key + " (" + label+": " + keycode + ")");
-        this.keyboard = keyboard;
+        GlobalKeyListener.keyboard = keyboard;
         Main.work.dialog.setVisible(false);
     }
 
