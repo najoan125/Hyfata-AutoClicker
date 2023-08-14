@@ -139,15 +139,8 @@ public class DesignAndWork extends JPanel {
 
         // listener -----------------
         ActionListener help = e -> JOptionPane.showMessageDialog(null,
-                """
-                        누르기 / 토글 에서
-                         "누르기" 로 설정한 경우,\s
-                        설정한 조작 키를 누르고 있는 동안 자동 클릭이 작동하며,\s
-                        키를 때는 순간 자동 클릭이 멈춥니다.
-
-                        "토글"로 설정한 경우,\s
-                        조작 키를 한번 누르면 자동 클릭 시작,\s
-                        한번 더 누르면 자동 클릭이 멈춥니다.""",
+                "누르기 / 토글 에서\n \"누르기\" 로 설정한 경우, \n설정한 조작 키를 누르고 있는 동안 자동 클릭이 작동하며, \n키를 때는 순간 자동 클릭이 멈춥니다." +
+                        "\n\n\"토글\"로 설정한 경우, \n조작 키를 한번 누르면 자동 클릭 시작, \n한번 더 누르면 자동 클릭이 멈춥니다.",
                 "도움말", JOptionPane.INFORMATION_MESSAGE);
         this.help.addActionListener(help);
     } // design()
