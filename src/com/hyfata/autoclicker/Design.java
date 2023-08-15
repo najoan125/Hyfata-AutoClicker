@@ -1,10 +1,13 @@
 package com.hyfata.autoclicker;
 
+import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.settings.AutoClickSettings;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Design extends JFrame {
-    public Design(String title) {
+    private void init(String title) {
         setTitle(title);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.getImage(AutoClicker.class.getResource("img/HF_AutoClickIcon.png"));
@@ -15,47 +18,55 @@ public class Design extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
         setResizable(false);
+    }
+
+    public Design(String title) {
+        init(title);
         design();
         setVisible(true);
     }
 
-    private JPanel getScrollablePanel(Component view) {
+    public static JPanel getScrollablePanel(Component view) {
         JScrollPane scrollPane = new JScrollPane(view);
         JPanel scrollablePanel = new JPanel(new BorderLayout());
         scrollablePanel.add(scrollPane, BorderLayout.CENTER);
         return scrollablePanel;
     }
 
-
     private void design() {
         JTabbedPane tabbedPane = new JTabbedPane();
-        JPanel tab1 = new JPanel();
-        tab1.add(new JLabel("Content for Tab 1"));
+
+        AutoClickSettings autoClickSettings = new AutoClickSettings();
+        JPanel tab1 = autoClickSettings.getPanel();
 
         JPanel tab2 = new JPanel();
-        tab2.add(new JLabel("Content for Tab 2"));
+        tab2.add(new JLabel("준비 중인 기능입니다."));
 
-        JPanel tab3 = about();
+        JPanel tab3 = new JPanel();
+        tab3.add(new JLabel("Content for Tab 3"));
 
-        tabbedPane.addTab("오토클릭 설정", tab1);
-        tabbedPane.addTab("프리셋 설정", tab2);
-        tabbedPane.addTab("정보", tab3);
+        JPanel tab4 = getAboutPanel();
+
+        tabbedPane.addTab(Locale.getAutoClickSetting(), tab1);
+        tabbedPane.addTab(Locale.getPresetSetting(), tab2);
+        tabbedPane.addTab(Locale.getHelp(), tab3);
+        tabbedPane.addTab(Locale.getAbout(), tab4);
         add(tabbedPane);
     }
 
-    private JPanel about() {
+    private JPanel getAboutPanel() {
         JPanel panel = new JPanel();
         String content =
                 "<html>" +
-                    "<h1>Hyfata AutoClicker v" + AutoClicker.APP_VERSION + "</h1>" +
-                    "Licence: GNU Lesser General Public License v3.0" +
-                    "<br>" +
-                    "Developer: Najoan" +
+                        "<h1>Hyfata AutoClicker v" + AutoClicker.APP_VERSION + "</h1>" +
+                        "Licence: GNU Lesser General Public License v3.0" +
+                        "<br>" +
+                        "Developer: Najoan" +
                         "<br>" +
                         "후원계좌: SC제일은행 47116134176192" +
                         "<br>" +
                         "<br>" +
-                        "<h2>오픈소스 라이선스</h2>" +
+                        "<h2>Open Source License</h2>" +
                         "<pre>" +
                         "* FlatLaf https://www.formdev.com/flatlaf/\n\tApache License 2.0\n\n" +
                         "* FlatLaf Arc Theme https://gitlab.com/zlamalp/arc-theme-idea/blob/master/arc-theme-idea-dark/resources/arc_theme_dark.theme.json\n\tMIT License\n\n" +
@@ -63,7 +74,7 @@ public class Design extends JFrame {
                         "* org.json https://mvnrepository.com/artifact/org.json/json\n\tPublic\n\n" +
                         "* JsonUtility https://github.com/najoan125/JsonUtility\n\tMIT License" +
                         "</pre>" +
-                "</html>";
+                        "</html>";
         panel.add(new JLabel(content));
         return getScrollablePanel(panel);
     }

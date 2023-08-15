@@ -3,6 +3,7 @@ package com.hyfata.autoclicker;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.utils.OSValidator;
 import com.hyfata.json.JsonReader;
 import com.hyfata.json.exceptions.JsonEmptyException;
@@ -25,10 +26,16 @@ public class AutoClicker extends JPanel {
     public static void main(String[] args){
         IntelliJTheme.setup(AutoClicker.class.getResourceAsStream("theme/arc_theme_dark.theme.json"));
         try {
+            Locale.setLocale("ko.json");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "언어 파일을 등록하는 과정에서 오류가 발생했습니다!\n제작자에게 디스코드로 문의해주세요!\nDiscord Tag: Najoan#0135",
+                    "오류 발생", JOptionPane.INFORMATION_MESSAGE);
+        }
+        try {
             update(); //update
         } catch (JsonEmptyException | URISyntaxException | IOException ignored) {}
         registerNativeHook();
-        new Design("HF AutoClicker v" + APP_VERSION);
+        new Design("Hyfata AutoClicker v" + APP_VERSION);
     } // main
 
     private static void registerNativeHook() {
@@ -52,18 +59,18 @@ public class AutoClicker extends JPanel {
 
         if (!latest.equals(APP_VERSION)) {
             if (OSValidator.isWindows()) {
-                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + APP_VERSION + ", 새로운 버전: " + latest
-                                + "\n변경된 내용: " + desc,
-                        "업데이트 발견!",
+                int answer = JOptionPane.showConfirmDialog(null, Locale.getUpdateDesc()+"\n\n" + Locale.getCurrentVersion() + APP_VERSION + ", " + Locale.getLatestVersion() + latest
+                                + "\n" + Locale.getChangeLog() + desc,
+                        Locale.getUpdateFound(),
                         JOptionPane.YES_NO_OPTION);
                 if (answer == JOptionPane.YES_OPTION) {
                     downloadUpdate(latest);
                     System.exit(1);
                 }
             } else {
-                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 최신 버전을 다운받으시겠습니까?\n\n현재 버전: " + APP_VERSION + ", 새로운 버전: " + latest
-                                + "\n변경된 내용: " + desc,
-                        "업데이트 발견!",
+                int answer = JOptionPane.showConfirmDialog(null, Locale.getUpdateDesc()+"\n\n" + Locale.getCurrentVersion() + APP_VERSION + ", " + Locale.getLatestVersion() + latest
+                                + "\n" + Locale.getChangeLog() + desc,
+                        Locale.getUpdateFound(),
                         JOptionPane.YES_NO_OPTION);
                 if (answer == JOptionPane.YES_OPTION) {
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {

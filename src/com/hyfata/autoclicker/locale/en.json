@@ -1,0 +1,21 @@
+{
+  "UpdateFound": "Update Found!",
+  "UpdateDesc": "An update has been found! Would you like to update?",
+  "CurrentVersion": "Current Version: ",
+  "LatestVersion": "Latest Version: ",
+  "ChangeLog": "Change Log: ",
+  "AutoClickSetting": "AutoClick Settings",
+  "PresetSetting": "Preset Settings",
+  "Help": "Help",
+  "About": "About",
+  "AutoClickDelay": "AutoClick Delay: ",
+  "DelayMs": "ms",
+  "DelayMicros": "μs",
+  "MouseLeft": "Left",
+  "MouseMiddle": "Middle",
+  "MouseRight": "Right",
+  "KeyHold": "Hold",
+  "KeyToggle": "Toggle",
+  "Key": "Macro key",
+  "ChangeKey": "Change macro key"
+}

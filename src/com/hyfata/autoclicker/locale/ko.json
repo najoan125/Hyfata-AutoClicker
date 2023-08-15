@@ -1,0 +1,21 @@
+{
+  "UpdateFound": "업데이트 발견!",
+  "UpdateDesc": "업데이트가 발견되었습니다! 업데이트 하시겠습니까?",
+  "CurrentVersion": "현재 버전: ",
+  "LatestVersion": "최신 버전: ",
+  "ChangeLog": "변경 사항: ",
+  "AutoClickSetting": "오토 클릭 설정",
+  "PresetSetting": "프리셋 설정",
+  "Help": "도움말",
+  "About": "정보",
+  "AutoClickDelay": "오토 클릭 지연: ",
+  "DelayMs": "밀리초(ms)",
+  "DelayMicros": "마이크로초(μs)",
+  "MouseLeft": "왼쪽",
+  "MouseMiddle": "가운데",
+  "MouseRight": "오른쪽",
+  "KeyHold": "홀드",
+  "KeyToggle": "토글",
+  "Key": "조작 키",
+  "ChangeKey": "조작 키 변경"
+}
