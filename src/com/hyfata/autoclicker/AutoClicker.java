@@ -1,5 +1,6 @@
 package com.hyfata.autoclicker;
 
+import com.formdev.flatlaf.IntelliJTheme;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.hyfata.autoclicker.utils.OSValidator;
@@ -17,29 +18,17 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
-public class Main extends JPanel {
-    private static final String appVersion = "2.0.0";
+public class AutoClicker extends JPanel {
+    public static final String APP_VERSION = "2.0.0";
     static DesignAndWork work = new DesignAndWork();
 
     public static void main(String[] args){
+        IntelliJTheme.setup(AutoClicker.class.getResourceAsStream("theme/arc_theme_dark.theme.json"));
         try {
             update(); //update
         } catch (JsonEmptyException | URISyntaxException | IOException ignored) {}
         registerNativeHook();
-
-        work.design();
-        //frame
-        JFrame frame = new JFrame("HF AutoClick " + appVersion);
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Image img = toolkit.getImage(Main.class.getResource("img/HF_AutoClickIcon.png"));
-        frame.setIconImage(img);
-        frame.getContentPane().add(work);// JFrame+JPanel(화면디자인)
-        frame.setBounds(300, 300, 300, 320);// x,y,w,h
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);// X버튼 클릭시 종료
-        frame.setFocusable(true);
-        frame.setResizable(false);
-        //frame
+        new Design("HF AutoClicker v" + APP_VERSION);
     } // main
 
     private static void registerNativeHook() {
@@ -61,9 +50,9 @@ public class Main extends JPanel {
         String latest = jObject.getString("latest-version");
         String desc = jObject.getString("description");
 
-        if (!latest.equals(appVersion)) {
+        if (!latest.equals(APP_VERSION)) {
             if (OSValidator.isWindows()) {
-                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 업데이트 하시겠습니까?\n\n현재 버전: " + APP_VERSION + ", 새로운 버전: " + latest
                                 + "\n변경된 내용: " + desc,
                         "업데이트 발견!",
                         JOptionPane.YES_NO_OPTION);
@@ -72,7 +61,7 @@ public class Main extends JPanel {
                     System.exit(1);
                 }
             } else {
-                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 최신 버전을 다운받으시겠습니까?\n\n현재 버전: " + appVersion + ", 새로운 버전: " + latest
+                int answer = JOptionPane.showConfirmDialog(null, "업데이트가 발견되었습니다! 최신 버전을 다운받으시겠습니까?\n\n현재 버전: " + APP_VERSION + ", 새로운 버전: " + latest
                                 + "\n변경된 내용: " + desc,
                         "업데이트 발견!",
                         JOptionPane.YES_NO_OPTION);
