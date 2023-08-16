@@ -9,6 +9,7 @@
   "Help": "도움말",
   "About": "정보",
   "AutoClickDelay": "오토 클릭 지연: ",
+  "mouseButton": "마우스 버튼: ",
   "DelayMs": "밀리초(ms)",
   "DelayMicros": "마이크로초(μs)",
   "MouseLeft": "왼쪽",
@@ -16,6 +17,9 @@
   "MouseRight": "오른쪽",
   "KeyHold": "홀드",
   "KeyToggle": "토글",
-  "Key": "조작 키",
-  "ChangeKey": "조작 키 변경"
+  "Key": "조작 키: ",
+  "ChangeKey": "조작 키 변경",
+  "NotSet": "지정되지 않음",
+  "KeyListening": "키 인식 중입니다...\nESC를 눌러 취소할 수 있습니다.",
+  "KeyListen": "키 인식 중..."
 }

@@ -4,44 +4,51 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
+import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 
 import java.awt.*;
 import java.util.Objects;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
     static boolean isPressed = false;
-    static boolean keyboard = true;
+    static boolean isKeyboard = true;
+    public static boolean isChanging = false;
+    static Integer keycode = null;
 
     //keyboard
     @Override
     public void nativeKeyPressed(NativeKeyEvent e){
         int key = e.getKeyCode();
-        String pt = Objects.requireNonNull(AutoClicker.work.CBmenu3.getSelectedItem()).toString();
-        if (Objects.equals(pt, "누르기") && !isPressed && AutoClicker.work.keycode != null && key == AutoClicker.work.keycode && !AutoClicker.work.changing && keyboard) {
-            startOrStop();
-            isPressed = true;
+        if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode) {
+            String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
+            if (holdToggle.equals(Locale.getKeyHold())){
+                startOrStop();
+                isPressed = true;
+            }
         }
     }
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
         int key = e.getKeyCode();
-        if (AutoClicker.work.keycode != null && key == AutoClicker.work.keycode && !AutoClicker.work.changing && keyboard) {
+        if (keycode != null && key == keycode && !isChanging && isKeyboard) {
             startOrStop();
             isPressed = false;
         }
 
-        if (AutoClicker.work.changing && key != NativeKeyEvent.VC_ESCAPE) {
-            String keychar = NativeKeyEvent.getKeyText(key);
-            if (keychar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))){
-                changeKeyCode(key, "", "키코드", true);
+        if (isChanging) {
+            if (key == NativeKeyEvent.VC_ESCAPE) {
+                cancelChangeKeyCode();
             }
             else {
-                changeKeyCode(key, keychar, "키코드", true);
+                String keyChar = NativeKeyEvent.getKeyText(key);
+                if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))){
+                    changeKeyCode(key, "", "키코드", true);
+                }
+                else {
+                    changeKeyCode(key, keyChar, "키코드", true);
+                }
             }
-        }
-
-        if (AutoClicker.work.changing && key == NativeKeyEvent.VC_ESCAPE) {
-            cancelChangeKeyCode();
         }
     }
     //keyboard
@@ -50,55 +57,56 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     @Override
     public void nativeMousePressed(NativeMouseEvent e) {
         int key = e.getButton();
-        String pt = Objects.requireNonNull(AutoClicker.work.CBmenu3.getSelectedItem()).toString();
-        if (Objects.equals(pt, "누르기") && AutoClicker.work.keycode != null && key == AutoClicker.work.keycode && !AutoClicker.work.changing && !keyboard) {
-            startOrStop();
+        if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode) {
+            String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
+            if (holdToggle.equals(Locale.getKeyHold())){
+                startOrStop();
+                isPressed = true;
+            }
         }
     }
+
+
     @Override
     public void nativeMouseReleased(NativeMouseEvent e) {
         int key = e.getButton();
-        if (AutoClicker.work.keycode != null && key == AutoClicker.work.keycode && !AutoClicker.work.changing && !keyboard) {
+        if (keycode != null && key == keycode && !isChanging && !isKeyboard) {
             startOrStop();
+            isPressed = false;
         }
 
-        if (AutoClicker.work.changing && key != 1) {
-            changeKeyCode(key, "","마우스 버튼 코드", false);
-        }
-
-        if (AutoClicker.work.changing && key == 1) {
-            cancelChangeKeyCode();
+        if (isChanging) {
+            if (key == 1) {
+                cancelChangeKeyCode();
+            }
+            else {
+                changeKeyCode(key, "","마우스 버튼 코드", false);
+            }
         }
     }
     //mouse
-
-    private void startOrStop() {
-        if (AutoClicker.work.start) {
-            AutoClicker.work.start = false;
-            AutoClicker.work.changeKey.setEnabled(true);
-            AutoClicker.work.auto.setEnabled(true);
-            AutoClicker.work.help.setEnabled(true);
-            AutoClicker.work.CBmenu.setEnabled(true);
-            AutoClicker.work.CBmenu2.setEnabled(true);
-            AutoClicker.work.CBmenu3.setEnabled(true);
-            AutoClicker.work.executorService.shutdown();
+    private static void startOrStop() {
+        if (AutoClickHandler.isStart) {
+            AutoClickHandler.isStart = false;
+            AutoClickSettingsUI.setAllEnabled(true);
+            AutoClickHandler.executorService.shutdown();
         } else {
-            AutoClicker.work.start();
+            AutoClickHandler.start();
         }
     }
 
-    private void changeKeyCode(int keycode, String key, String label, boolean keyboard) {
-        AutoClicker.work.keycode = keycode;
-        AutoClicker.work.changing = false;
-        AutoClicker.work.changeKey.setEnabled(true);
-        AutoClicker.work.keycode_l.setText(key + " (" + label+": " + keycode + ")");
-        GlobalKeyListener.keyboard = keyboard;
-        AutoClicker.work.dialog.setVisible(false);
+    private static void changeKeyCode(int keycode, String key, String label, boolean keyboard) {
+        GlobalKeyListener.keycode = keycode;
+        isChanging = false;
+        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
+        AutoClickSettingsUI.key.setText(key + " (" + label+": " + keycode + ")");
+        GlobalKeyListener.isKeyboard = keyboard;
+        AutoClickSettingsUI.changingKeyDialog.setVisible(false);
     }
 
-    private void cancelChangeKeyCode(){
-        AutoClicker.work.changing = false;
-        AutoClicker.work.changeKey.setEnabled(true);
-        AutoClicker.work.dialog.setVisible(false);
+    private static void cancelChangeKeyCode(){
+        isChanging = false;
+        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
+        AutoClickSettingsUI.changingKeyDialog.setVisible(false);
     }
 }

@@ -9,6 +9,7 @@
   "Help": "Help",
   "About": "About",
   "AutoClickDelay": "AutoClick Delay: ",
+  "mouseButton": "Mouse Button: ",
   "DelayMs": "ms",
   "DelayMicros": "μs",
   "MouseLeft": "Left",
@@ -16,6 +17,9 @@
   "MouseRight": "Right",
   "KeyHold": "Hold",
   "KeyToggle": "Toggle",
-  "Key": "Macro key",
-  "ChangeKey": "Change macro key"
+  "Key": "Macro key: ",
+  "ChangeKey": "Change macro key",
+  "NotSet": "Not set",
+  "KeyListening": "Recognizing key...\nYou can cancel by pressing ESC.",
+  "KeyListen": "Recognizing key..."
 }

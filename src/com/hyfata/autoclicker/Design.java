@@ -1,19 +1,20 @@
 package com.hyfata.autoclicker;
 
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.settings.AutoClickSettings;
+import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Design extends JFrame {
+    public static final int WIDTH = 450, HEIGHT = 320;
     private void init(String title) {
         setTitle(title);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image img = toolkit.getImage(AutoClicker.class.getResource("img/HF_AutoClickIcon.png"));
         setIconImage(img);
 
-        setSize(450, 320);
+        setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
@@ -36,8 +37,8 @@ public class Design extends JFrame {
     private void design() {
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        AutoClickSettings autoClickSettings = new AutoClickSettings();
-        JPanel tab1 = autoClickSettings.getPanel();
+        AutoClickSettingsUI autoClickSettingsUI = new AutoClickSettingsUI();
+        JPanel tab1 = autoClickSettingsUI.getPanel();
 
         JPanel tab2 = new JPanel();
         tab2.add(new JLabel("준비 중인 기능입니다."));

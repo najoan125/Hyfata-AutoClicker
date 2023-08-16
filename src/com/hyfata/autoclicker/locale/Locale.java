@@ -27,6 +27,10 @@ public class Locale {
     private static String keyToggle;
     private static String key;
     private static String changeKey;
+    private static String mouseButton;
+    private static String notSet;
+    private static String keyListening;
+    private static String keyListen;
 
     public static void setLocale(String loc) throws IOException {
         URL url = Locale.class.getResource(loc);
@@ -62,10 +66,29 @@ public class Locale {
         keyToggle = locale.getString("KeyToggle");
         key = locale.getString("Key");
         changeKey = locale.getString("ChangeKey");
+        mouseButton = locale.getString("mouseButton");
+        notSet = locale.getString("NotSet");
+        keyListening = locale.getString("KeyListening");
+        keyListen = locale.getString("KeyListen");
+    }
+
+    public static String getKeyListen() {
+        return keyListen;
+    }
+
+    public static String getNotSet() {
+        return notSet;
+    }
+
+    public static String getKeyListening() {
+        return keyListening;
     }
 
     public static String getUpdateFound() {
         return updateFound;
+    }
+    public static String getMouseButton() {
+        return mouseButton;
     }
 
     public static String getUpdateDesc() {

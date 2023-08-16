@@ -21,7 +21,6 @@ import java.nio.channels.ReadableByteChannel;
 
 public class AutoClicker extends JPanel {
     public static final String APP_VERSION = "2.0.0";
-    static DesignAndWork work = new DesignAndWork();
 
     public static void main(String[] args){
         IntelliJTheme.setup(AutoClicker.class.getResourceAsStream("theme/arc_theme_dark.theme.json"));
