@@ -21,5 +21,8 @@
   "ChangeKey": "Change macro key",
   "NotSet": "Not set",
   "KeyListening": "Recognizing key...\nYou can cancel by pressing ESC.",
-  "KeyListen": "Recognizing key..."
+  "KeyListen": "Recognizing key...",
+  "Language": "Language",
+  "KeyCode": "Keycode",
+  "MouseButtonCode": "Mouse button code"
 }

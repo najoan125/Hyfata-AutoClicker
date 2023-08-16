@@ -31,6 +31,9 @@ public class Locale {
     private static String notSet;
     private static String keyListening;
     private static String keyListen;
+    private static String language;
+    private static String keyCode;
+    private static String mouseButtonCode;
 
     public static void setLocale(String loc) throws IOException {
         URL url = Locale.class.getResource(loc);
@@ -39,7 +42,6 @@ public class Locale {
             try {
                 File file = new File(url.toURI());
                 locale = JsonReader.readFromFile(file.getPath());
-                // 이후 처리
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
@@ -70,6 +72,21 @@ public class Locale {
         notSet = locale.getString("NotSet");
         keyListening = locale.getString("KeyListening");
         keyListen = locale.getString("KeyListen");
+        language = locale.getString("Language");
+        keyCode = locale.getString("KeyCode");
+        mouseButtonCode = locale.getString("MouseButtonCode");
+    }
+
+    public static String getKeyCode() {
+        return keyCode;
+    }
+
+    public static String getMouseButtonCode() {
+        return mouseButtonCode;
+    }
+
+    public static String getLanguage() {
+        return language;
     }
 
     public static String getKeyListen() {

@@ -43,10 +43,10 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
             else {
                 String keyChar = NativeKeyEvent.getKeyText(key);
                 if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))){
-                    changeKeyCode(key, "", "키코드", true);
+                    changeKeyCode(key, "", Locale.getKeyCode(), true);
                 }
                 else {
-                    changeKeyCode(key, keyChar, "키코드", true);
+                    changeKeyCode(key, keyChar, Locale.getKeyCode(), true);
                 }
             }
         }
@@ -80,7 +80,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
                 cancelChangeKeyCode();
             }
             else {
-                changeKeyCode(key, "","마우스 버튼 코드", false);
+                changeKeyCode(key, "",Locale.getMouseButtonCode(), false);
             }
         }
     }

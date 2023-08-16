@@ -44,17 +44,6 @@ public class AutoClickSettingsUI extends JFrame {
         return panel;
     }
 
-    public static void setAllEnabled(boolean bool) {
-        delayUnits.setEnabled(bool);
-        mouseButtons.setEnabled(bool);
-        holdToggles.setEnabled(bool);
-        changeKeyButton.setEnabled(bool);
-        autoDelay.setEnabled(bool);
-    }
-
-    private void addHeight(int height) {
-        addedHeights.put(panels.size()-1, height);
-    }
 
     private void initPanels() {
         delay(100, Locale.getDelayMs());
@@ -145,5 +134,16 @@ public class AutoClickSettingsUI extends JFrame {
         formatter.setAllowsInvalid(false);
         formatter.setCommitsOnValidEdit(true);
         return new JFormattedTextField(formatter);
+    }
+    public static void setAllEnabled(boolean bool) {
+        delayUnits.setEnabled(bool);
+        mouseButtons.setEnabled(bool);
+        holdToggles.setEnabled(bool);
+        changeKeyButton.setEnabled(bool);
+        autoDelay.setEnabled(bool);
+    }
+
+    private void addHeight(int height) {
+        addedHeights.put(panels.size()-1, height);
     }
 }

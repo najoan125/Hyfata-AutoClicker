@@ -21,5 +21,8 @@
   "ChangeKey": "조작 키 변경",
   "NotSet": "지정되지 않음",
   "KeyListening": "키 인식 중입니다...\nESC를 눌러 취소할 수 있습니다.",
-  "KeyListen": "키 인식 중..."
+  "KeyListen": "키 인식 중...",
+  "Language": "언어",
+  "KeyCode": "키코드",
+  "MouseButtonCode": "마우스 버튼 코드"
 }

@@ -44,14 +44,18 @@ public class Design extends JFrame {
         tab2.add(new JLabel("준비 중인 기능입니다."));
 
         JPanel tab3 = new JPanel();
-        tab3.add(new JLabel("Content for Tab 3"));
+        tab3.add(new JLabel("Language"));
 
-        JPanel tab4 = getAboutPanel();
+        JPanel tab4 = new JPanel();
+        tab4.add(new JLabel("Content for Tab 3"));
+
+        JPanel tab5 = getAboutPanel();
 
         tabbedPane.addTab(Locale.getAutoClickSetting(), tab1);
         tabbedPane.addTab(Locale.getPresetSetting(), tab2);
-        tabbedPane.addTab(Locale.getHelp(), tab3);
-        tabbedPane.addTab(Locale.getAbout(), tab4);
+        tabbedPane.addTab(Locale.getLanguage(), tab3);
+        tabbedPane.addTab(Locale.getHelp(), tab4);
+        tabbedPane.addTab(Locale.getAbout(), tab5);
         add(tabbedPane);
     }
 
