@@ -96,11 +96,11 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     }
 
     private static void changeKeyCode(int keycode, String key, String label, boolean keyboard) {
-        GlobalKeyListener.keycode = keycode;
         isChanging = false;
-        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
-        AutoClickSettingsUI.key.setText(key + " (" + label+": " + keycode + ")");
+        GlobalKeyListener.keycode = keycode;
         GlobalKeyListener.isKeyboard = keyboard;
+        AutoClickSettingsUI.key.setText(key + " (" + label+": " + keycode + ")");
+        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
         AutoClickSettingsUI.changingKeyDialog.setVisible(false);
     }
 

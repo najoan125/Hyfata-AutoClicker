@@ -1,11 +1,11 @@
 package com.hyfata.autoclicker.locale;
 
 import com.hyfata.json.JsonReader;
+import com.hyfata.json.exceptions.JsonEmptyException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.Objects;
 
 public class Locale {
     private static String updateFound;
@@ -35,20 +35,8 @@ public class Locale {
     private static String keyCode;
     private static String mouseButtonCode;
 
-    public static void setLocale(String loc) throws IOException {
-        URL url = Locale.class.getResource(loc);
-        JSONObject locale;
-        if (url != null) {
-            try {
-                File file = new File(url.toURI());
-                locale = JsonReader.readFromFile(file.getPath());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-        } else {
-            return;
-        }
+    public static void setLocale(String loc) throws IOException, JsonEmptyException {
+        JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
         updateFound = locale.getString("UpdateFound");
         updateDesc = locale.getString("UpdateDesc");
         currentVersion = locale.getString("CurrentVersion");
