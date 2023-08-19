@@ -1,8 +1,10 @@
 package com.hyfata.autoclicker.ui.settings;
 
-import com.hyfata.autoclicker.Design;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.utils.settings.UserSettings;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -11,11 +13,12 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AutoClickSettingsUI extends JFrame {
-    public static JFormattedTextField autoDelay;
+    public static JFormattedTextField delay;
     public static JComboBox<String> delayUnits, mouseButtons, holdToggles;
-    public static JButton changeKeyButton;
+    public static JButton changeKeyButton, resetButton;
     public static JLabel key = null;
     public static JDialog changingKeyDialog;
 
@@ -46,24 +49,73 @@ public class AutoClickSettingsUI extends JFrame {
 
 
     private void initPanels() {
-        delay(100, Locale.getDelayMs());
-        mouseButton(Locale.getMouseLeft());
-        holdToggle(Locale.getKeyHold());
+        String delayUnit;
+        if (Objects.equals(UserSettings.getDelayUnit(), "ms")) {
+            delayUnit = Locale.getDelayMs();
+        } else {
+            delayUnit = Locale.getDelayMicros();
+        }
+        delay(Integer.parseInt(UserSettings.getDelay()), delayUnit);
 
-        if (key == null) key = new JLabel(Locale.getNotSet());
+        String mouseButton;
+        if (Objects.equals(UserSettings.getMouseButton(),"left")) {
+            mouseButton = Locale.getMouseLeft();
+        }
+        else if (Objects.equals(UserSettings.getMouseButton(), "middle")) {
+            mouseButton = Locale.getMouseMiddle();
+        }
+        else {
+            mouseButton = Locale.getMouseRight();
+        }
+        mouseButton(mouseButton);
+
+        String holdToggle;
+        if (UserSettings.isToggle()) holdToggle = Locale.getKeyToggle();
+        else holdToggle = Locale.getKeyHold();
+        holdToggle(holdToggle);
+
+        Integer keycode;
+        boolean keyboard = UserSettings.isKeyboard();
+        if (UserSettings.getKeycode() == -1)
+            keycode = null;
+        else
+            keycode = UserSettings.getKeycode();
+        GlobalKeyListener.keycode = keycode;
+        GlobalKeyListener.isKeyboard = keyboard;
+        key = new JLabel();
+        if (keycode == null) {
+            key.setText(Locale.getNotSet());
+        }
+        else {
+            setKeyText(keycode, keyboard);
+        }
         key();
 
         changeKey();
+    }
+
+    private void setKeyText(Integer keycode, boolean keyboard) {
+        if (keyboard) {
+            String keyChar = NativeKeyEvent.getKeyText(keycode);
+            if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))) {
+                key.setText(" (" + Locale.getKeyCode()+": " + keycode + ")");
+            } else {
+                key.setText(keyChar + " (" + Locale.getKeyCode()+": " + keycode + ")");
+            }
+        }
+        else {
+            key.setText(" (" + Locale.getMouseButtonCode()+": " + keycode + ")");
+        }
     }
 
     private void delay(int defaultDelay, String unit) {
         JPanel panel = new JPanel();
         panel.add(new JLabel(Locale.getAutoClickDelay()));
 
-        autoDelay = getIntTextField();
-        autoDelay.setPreferredSize(new Dimension(80, 23));
-        autoDelay.setValue(defaultDelay);
-        panel.add(autoDelay);
+        delay = getIntTextField();
+        delay.setPreferredSize(new Dimension(80, 23));
+        delay.setValue(defaultDelay);
+        panel.add(delay);
 
         String[] menu = {Locale.getDelayMs(), Locale.getDelayMicros()};
         delayUnits = new JComboBox<>(menu);
@@ -101,6 +153,13 @@ public class AutoClickSettingsUI extends JFrame {
         JPanel panel = new JPanel();
         panel.add(new JLabel(Locale.getKey()));
         panel.add(key);
+        resetButton = new JButton(Locale.getReset());
+        ActionListener buttonListener = e -> {
+            key.setText(Locale.getNotSet());
+            GlobalKeyListener.keycode = null;
+        };
+        resetButton.addActionListener(buttonListener);
+        panel.add(resetButton);
         addHeight(30);
         panels.add(panel);
     }
@@ -140,7 +199,8 @@ public class AutoClickSettingsUI extends JFrame {
         mouseButtons.setEnabled(bool);
         holdToggles.setEnabled(bool);
         changeKeyButton.setEnabled(bool);
-        autoDelay.setEnabled(bool);
+        delay.setEnabled(bool);
+        resetButton.setEnabled(bool);
     }
 
     private void addHeight(int height) {

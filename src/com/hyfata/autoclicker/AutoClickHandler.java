@@ -2,6 +2,7 @@ package com.hyfata.autoclicker;
 
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.LanguageUI;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -28,8 +29,9 @@ public class AutoClickHandler {
     private static long delay;
 
     private static void init() {
-        delay = Long.parseLong(AutoClickSettingsUI.autoDelay.getValue().toString());
+        delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
         AutoClickSettingsUI.setAllEnabled(false);
+        LanguageUI.setAllEnabled(false);
         left = false;
         middle = false;
         right = false;

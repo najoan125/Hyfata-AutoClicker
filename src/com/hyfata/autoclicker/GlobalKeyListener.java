@@ -6,15 +6,16 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.LanguageUI;
 
 import java.awt.*;
 import java.util.Objects;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
     static boolean isPressed = false;
-    static boolean isKeyboard = true;
+    public static boolean isKeyboard = true;
     public static boolean isChanging = false;
-    static Integer keycode = null;
+    public static Integer keycode = null;
 
     //keyboard
     @Override
@@ -89,6 +90,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         if (AutoClickHandler.isStart) {
             AutoClickHandler.isStart = false;
             AutoClickSettingsUI.setAllEnabled(true);
+            LanguageUI.setAllEnabled(true);
             AutoClickHandler.executorService.shutdown();
         } else {
             AutoClickHandler.start();

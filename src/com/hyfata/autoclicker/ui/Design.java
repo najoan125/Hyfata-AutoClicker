@@ -1,10 +1,16 @@
-package com.hyfata.autoclicker;
+package com.hyfata.autoclicker.ui;
 
+import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.LanguageUI;
+import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class Design extends JFrame {
     public static final int WIDTH = 450, HEIGHT = 320;
@@ -19,6 +25,20 @@ public class Design extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setFocusable(true);
         setResizable(false);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    SettingsUtil.loadCurrentSettings();
+                    SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
+                    SettingsUtil.saveFile();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                System.exit(0);
+            }
+        });
     }
 
     public Design(String title) {
@@ -43,8 +63,8 @@ public class Design extends JFrame {
         JPanel tab2 = new JPanel();
         tab2.add(new JLabel("준비 중인 기능입니다."));
 
-        JPanel tab3 = new JPanel();
-        tab3.add(new JLabel("Language"));
+        LanguageUI languageUI = new LanguageUI();
+        JPanel tab3 = languageUI.getPanel();
 
         JPanel tab4 = new JPanel();
         tab4.add(new JLabel("Content for Tab 3"));

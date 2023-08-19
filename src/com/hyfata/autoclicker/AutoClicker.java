@@ -4,7 +4,9 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.utils.OSValidator;
+import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.JsonReader;
 import com.hyfata.json.exceptions.JsonEmptyException;
 import org.json.JSONObject;
@@ -22,21 +24,42 @@ import java.nio.channels.ReadableByteChannel;
 public class AutoClicker extends JPanel {
     public static final String APP_VERSION = "2.0.0";
 
+    static Design design;
+
     public static void main(String[] args){
         IntelliJTheme.setup(AutoClicker.class.getResourceAsStream("theme/arc_theme_dark.theme.json"));
+
         try {
-            Locale.setLocale("ko.json");
+            SettingsUtil.init();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException e) {
             JOptionPane.showMessageDialog(null, "언어 파일을 등록하는 과정에서 오류가 발생했습니다!\n제작자에게 디스코드로 문의해주세요!\nDiscord Tag: Najoan#0135\n\n" +
                             e.getMessage(),
                     "오류 발생", JOptionPane.INFORMATION_MESSAGE);
         }
+
         try {
             update(); //update
         } catch (JsonEmptyException | URISyntaxException | IOException ignored) {}
+
         registerNativeHook();
-        new Design("Hyfata AutoClicker v" + APP_VERSION);
+
+        startUI();
     } // main
+
+    public static void reload() {
+        design.dispose();
+        startUI();
+    }
+
+    private static void startUI() {
+        design = new Design("Hyfata AutoClicker v" + APP_VERSION);
+    }
 
     private static void registerNativeHook() {
         try {

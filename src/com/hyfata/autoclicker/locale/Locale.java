@@ -34,6 +34,7 @@ public class Locale {
     private static String language;
     private static String keyCode;
     private static String mouseButtonCode;
+    private static String reset;
 
     public static void setLocale(String loc) throws IOException, JsonEmptyException {
         JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
@@ -63,8 +64,12 @@ public class Locale {
         language = locale.getString("Language");
         keyCode = locale.getString("KeyCode");
         mouseButtonCode = locale.getString("MouseButtonCode");
+        reset = locale.getString("reset");
     }
 
+    public static String getReset() {
+        return reset;
+    }
     public static String getKeyCode() {
         return keyCode;
     }

@@ -24,5 +24,6 @@
   "KeyListen": "Recognizing key...",
   "Language": "Language",
   "KeyCode": "Keycode",
-  "MouseButtonCode": "Mouse button code"
+  "MouseButtonCode": "Mouse button code",
+  "reset": "Reset"
 }

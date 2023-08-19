@@ -24,5 +24,6 @@
   "KeyListen": "키 인식 중...",
   "Language": "언어",
   "KeyCode": "키코드",
-  "MouseButtonCode": "마우스 버튼 코드"
+  "MouseButtonCode": "마우스 버튼 코드",
+  "reset": "초기화"
 }
