@@ -5,7 +5,7 @@
   "LatestVersion": "최신 버전: ",
   "ChangeLog": "변경 사항: ",
   "AutoClickSetting": "오토 클릭 설정",
-  "PresetSetting": "프리셋 설정",
+  "PresetSetting": "사전 설정",
   "Help": "도움말",
   "About": "정보",
   "AutoClickDelay": "오토 클릭 지연: ",
@@ -25,5 +25,11 @@
   "Language": "언어",
   "KeyCode": "키코드",
   "MouseButtonCode": "마우스 버튼 코드",
-  "reset": "초기화"
+  "reset": "초기화",
+  "currentPreset": "현재 사전 설정: ",
+  "cantRemoveDefault": "Default 사전 설정은 제거할 수 없습니다!",
+  "rename": "이름 변경...",
+  "inputPreset": "사전 설정 이름 입력: ",
+  "cantRenameDefault": "Default 사전 설정은 이름을 바꿀 수 없습니다!",
+  "helpDesc": "<html>밀리초: 1/1000초, 마이크로초: 1/1000밀리초<br><br>홀드 / 토글 에서<br> \"홀드\" 로 설정한 경우, <br>설정한 조작 키를 누르고 있는 동안 자동 클릭이 작동하며, <br>키를 때는 순간 자동 클릭이 멈춥니다.<br><br>\"토글\"로 설정한 경우, <br>조작 키를 한번 누르면 자동 클릭 시작, <br>한번 더 누르면 자동 클릭이 멈춥니다.</html>"
 }

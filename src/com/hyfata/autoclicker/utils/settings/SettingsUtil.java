@@ -25,9 +25,9 @@ public class SettingsUtil {
                 settings = JsonReader.readFromFile(FILE_PATH);
             } catch (JsonEmptyException e) {
                 settings = new JSONObject();
+            } finally {
                 read();
             }
-            read();
         }
         else {
             settings = new JSONObject();
@@ -46,6 +46,7 @@ public class SettingsUtil {
             setCurrentPreset("default");
             loadDefault();
             savePreset("default");
+            loadAllPresets();
         }
         else {
             loadAllPresets();
@@ -61,7 +62,7 @@ public class SettingsUtil {
         UserSettings.setKeyboard(false);
     }
 
-    private static void loadPreset(String preset) {
+    public static void loadPreset(String preset) {
         JSONObject jsonObject = settings.getJSONObject(preset);
         UserSettings.setDelay(jsonObject.optString("delay","100"));
         UserSettings.setDelayUnit(jsonObject.optString("delayUnit","ms"));
@@ -133,11 +134,31 @@ public class SettingsUtil {
     }
     private static void loadAllPresets() {
         presets = new ArrayList<>();
+        presets.add("default");
         for (String key : settings.keySet()) {
             if (settings.get(key) instanceof JSONObject) {
-                presets.add(key);
+                if (!key.equals("default"))
+                    presets.add(key);
             }
         }
+    }
+
+    public static void addPreset(String preset) {
+        loadCurrentSettings();
+        savePreset(preset);
+        presets.add(preset);
+    }
+
+    public static void renamePreset(String preset, String name) {
+        loadPreset(preset);
+        removePreset(preset);
+        savePreset(name);
+        presets.add(name);
+    }
+
+    public static void removePreset(String preset) {
+        presets.remove(preset);
+        settings.remove(preset);
     }
 
     public static ArrayList<String> getPresets() {

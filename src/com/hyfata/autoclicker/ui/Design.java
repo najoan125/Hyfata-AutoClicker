@@ -4,6 +4,7 @@ import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
+import com.hyfata.autoclicker.ui.settings.PresetUI;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
@@ -57,25 +58,26 @@ public class Design extends JFrame {
     private void design() {
         JTabbedPane tabbedPane = new JTabbedPane();
 
+        // 1
         AutoClickSettingsUI autoClickSettingsUI = new AutoClickSettingsUI();
-        JPanel tab1 = autoClickSettingsUI.getPanel();
+        tabbedPane.addTab(Locale.getAutoClickSetting(), autoClickSettingsUI.getPanel());
 
-        JPanel tab2 = new JPanel();
-        tab2.add(new JLabel("준비 중인 기능입니다."));
+        // 2
+        PresetUI presetUI = new PresetUI();
+        tabbedPane.addTab(Locale.getPresetSetting(), presetUI.getPanel());
 
+        // 3
         LanguageUI languageUI = new LanguageUI();
-        JPanel tab3 = languageUI.getPanel();
+        tabbedPane.addTab(Locale.getLanguage(), languageUI.getPanel());
 
+        // 4
         JPanel tab4 = new JPanel();
-        tab4.add(new JLabel("Content for Tab 3"));
-
-        JPanel tab5 = getAboutPanel();
-
-        tabbedPane.addTab(Locale.getAutoClickSetting(), tab1);
-        tabbedPane.addTab(Locale.getPresetSetting(), tab2);
-        tabbedPane.addTab(Locale.getLanguage(), tab3);
+        tab4.add(new JLabel(Locale.getHelpDesc()));
         tabbedPane.addTab(Locale.getHelp(), tab4);
-        tabbedPane.addTab(Locale.getAbout(), tab5);
+
+        // 5
+        tabbedPane.addTab(Locale.getAbout(), getAboutPanel());
+
         add(tabbedPane);
     }
 

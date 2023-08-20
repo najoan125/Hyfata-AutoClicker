@@ -35,6 +35,12 @@ public class Locale {
     private static String keyCode;
     private static String mouseButtonCode;
     private static String reset;
+    private static String currentPreset;
+    private static String cantRemoveDefault;
+    private static String rename;
+    private static String inputPreset;
+    private static String cantRenameDefault;
+    private static String helpDesc;
 
     public static void setLocale(String loc) throws IOException, JsonEmptyException {
         JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
@@ -65,6 +71,36 @@ public class Locale {
         keyCode = locale.getString("KeyCode");
         mouseButtonCode = locale.getString("MouseButtonCode");
         reset = locale.getString("reset");
+        currentPreset = locale.getString("currentPreset");
+        cantRemoveDefault = locale.getString("cantRemoveDefault");
+        rename = locale.getString("rename");
+        inputPreset = locale.getString("inputPreset");
+        cantRenameDefault = locale.getString("cantRenameDefault");
+        helpDesc = locale.getString("helpDesc");
+    }
+
+    public static String getHelpDesc() {
+        return helpDesc;
+    }
+
+    public static String getCantRenameDefault() {
+        return cantRenameDefault;
+    }
+
+    public static String getInputPreset() {
+        return inputPreset;
+    }
+
+    public static String getRename() {
+        return rename;
+    }
+
+    public static String getCurrentPreset() {
+        return currentPreset;
+    }
+
+    public static String getCantRemoveDefault() {
+        return cantRemoveDefault;
     }
 
     public static String getReset() {

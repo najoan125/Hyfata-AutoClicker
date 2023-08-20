@@ -18,23 +18,20 @@ public class LanguageUI {
     ArrayList<JPanel> panels = new ArrayList<>();
     HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
     public JPanel getPanel() {
-        JPanel panel = new JPanel(null);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         initPanels();
 
-        int y = 10;
         int height = 35;
 
         int i = 0;
         for (JPanel p : panels) {
             p.setLayout(new FlowLayout(FlowLayout.CENTER));
-            p.setBounds(0,y, Design.WIDTH,height);
+            p.setPreferredSize(new Dimension(Design.WIDTH, height));
             if (addedHeights.containsKey(i)){
-                p.setBounds(0,y, Design.WIDTH,height+addedHeights.get(i));
-                y += addedHeights.get(i);
+                p.setPreferredSize(new Dimension(Design.WIDTH,height+addedHeights.get(i)));
             }
             panel.add(p);
 
-            y+=height;
             i++;
         }
         return panel;
@@ -57,7 +54,10 @@ public class LanguageUI {
         list = new JList<>(new String[]{"한국어","English"});
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(list);
-        panels.add(panel);
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.getViewport().setPreferredSize(new Dimension(140, 90));
+        JPanel scrollPanel = Design.getScrollablePanel(scrollPane);
+        panels.add(scrollPanel);
     }
 
     private void okButton() {
@@ -66,34 +66,28 @@ public class LanguageUI {
 
         OK.addActionListener(e -> {
             String language = list.getSelectedValue();
-            if (language.equals("한국어")) {
-                SettingsUtil.setLang("ko.json");
-                setLanguage();
-            }
-            else if (language.equals("English")) {
-                SettingsUtil.setLang("en.json");
+            if (language != null) {
+                if (language.equals("한국어")) {
+                    SettingsUtil.setLang("ko.json");
+                } else if (language.equals("English")) {
+                    SettingsUtil.setLang("en.json");
+                }
                 setLanguage();
             }
         });
         panel.add(OK);
-        addHeight(50);
+        addHeight(80);
         panels.add(panel);
     }
 
     private void setLanguage() {
-        try {
-            SettingsUtil.loadCurrentSettings();
-            SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
-            SettingsUtil.saveFile();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        SettingsUtil.loadCurrentSettings();
+        SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
         try {
             Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException ex) {
-            JOptionPane.showMessageDialog(null, "언어 파일을 등록하는 과정에서 오류가 발생했습니다!\n제작자에게 디스코드로 문의해주세요!\nDiscord Tag: Najoan#0135\n\n" +
-                            ex.getMessage(),
-                    "오류 발생", JOptionPane.INFORMATION_MESSAGE);
+            AutoClicker.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: "+AutoClicker.DISCORD_TAG+"\n\n"+ex.getMessage(), "Error loading language file");
+            System.exit(-1);
         }
         AutoClicker.reload();
     }

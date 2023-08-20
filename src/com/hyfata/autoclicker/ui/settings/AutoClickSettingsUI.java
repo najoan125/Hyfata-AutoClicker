@@ -1,9 +1,9 @@
 package com.hyfata.autoclicker.ui.settings;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.utils.settings.UserSettings;
 
 import javax.swing.*;
@@ -11,6 +11,7 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -21,7 +22,6 @@ public class AutoClickSettingsUI extends JFrame {
     public static JButton changeKeyButton, resetButton;
     public static JLabel key = null;
     public static JDialog changingKeyDialog;
-
     ArrayList<JPanel> panels = new ArrayList<>();
     HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
     public JPanel getPanel() {
@@ -94,7 +94,51 @@ public class AutoClickSettingsUI extends JFrame {
         changeKey();
     }
 
-    private void setKeyText(Integer keycode, boolean keyboard) {
+    public static void reload() {
+        delay.setValue(Integer.parseInt(UserSettings.getDelay()));
+
+        String delayUnit;
+        if (Objects.equals(UserSettings.getDelayUnit(), "ms")) {
+            delayUnit = Locale.getDelayMs();
+        } else {
+            delayUnit = Locale.getDelayMicros();
+        }
+        delayUnits.setSelectedItem(delayUnit);
+
+        String mouseButton;
+        if (Objects.equals(UserSettings.getMouseButton(),"left")) {
+            mouseButton = Locale.getMouseLeft();
+        }
+        else if (Objects.equals(UserSettings.getMouseButton(), "middle")) {
+            mouseButton = Locale.getMouseMiddle();
+        }
+        else {
+            mouseButton = Locale.getMouseRight();
+        }
+        mouseButtons.setSelectedItem(mouseButton);
+
+        String holdToggle;
+        if (UserSettings.isToggle()) holdToggle = Locale.getKeyToggle();
+        else holdToggle = Locale.getKeyHold();
+        holdToggles.setSelectedItem(holdToggle);
+
+        Integer keycode;
+        boolean keyboard = UserSettings.isKeyboard();
+        if (UserSettings.getKeycode() == -1)
+            keycode = null;
+        else
+            keycode = UserSettings.getKeycode();
+        GlobalKeyListener.keycode = keycode;
+        GlobalKeyListener.isKeyboard = keyboard;
+        if (keycode == null) {
+            key.setText(Locale.getNotSet());
+        }
+        else {
+            AutoClickSettingsUI.setKeyText(keycode, keyboard);
+        }
+    }
+
+    private static void setKeyText(Integer keycode, boolean keyboard) {
         if (keyboard) {
             String keyChar = NativeKeyEvent.getKeyText(keycode);
             if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))) {
@@ -119,7 +163,7 @@ public class AutoClickSettingsUI extends JFrame {
 
         String[] menu = {Locale.getDelayMs(), Locale.getDelayMicros()};
         delayUnits = new JComboBox<>(menu);
-        delayUnits.setPreferredSize(new Dimension(120, 23));
+        delayUnits.setPreferredSize(new Dimension(140, 23));
         delayUnits.setSelectedItem(unit);
         panel.add(delayUnits);
         panels.add(panel);
@@ -186,13 +230,33 @@ public class AutoClickSettingsUI extends JFrame {
 
     private JFormattedTextField getIntTextField() {
         NumberFormat format = NumberFormat.getInstance();
-        NumberFormatter formatter = new NumberFormatter(format);
+        NumberFormatter formatter = new NumberFormatter(format) {
+            @Override
+            public Object stringToValue(String text) throws ParseException {
+                if (text != null && text.length() == 0) {
+                    return 0L;
+                }
+                return super.stringToValue(text);
+            }
+        };
+
         formatter.setValueClass(Long.class);
-        formatter.setMinimum(1L);
+        formatter.setMinimum(0L);
         formatter.setMaximum(Long.MAX_VALUE);
         formatter.setAllowsInvalid(false);
         formatter.setCommitsOnValidEdit(true);
-        return new JFormattedTextField(formatter);
+
+        JFormattedTextField textField = new JFormattedTextField(formatter);
+        textField.addCaretListener(e -> {
+            int caretPosition = textField.getCaretPosition();
+            int textLength = textField.getText().length();
+
+            if (caretPosition < textLength && textField.getText().equals("0")) {
+                textField.setCaretPosition(textLength);
+            }
+        });
+
+        return textField;
     }
     public static void setAllEnabled(boolean bool) {
         delayUnits.setEnabled(bool);

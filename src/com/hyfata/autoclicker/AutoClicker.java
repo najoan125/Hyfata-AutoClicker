@@ -23,7 +23,7 @@ import java.nio.channels.ReadableByteChannel;
 
 public class AutoClicker extends JPanel {
     public static final String APP_VERSION = "2.0.0";
-
+    public static final String DISCORD_TAG = "Najoan#1111";
     static Design design;
 
     public static void main(String[] args){
@@ -32,29 +32,33 @@ public class AutoClicker extends JPanel {
         try {
             SettingsUtil.init();
         } catch (IOException e) {
-            e.printStackTrace();
+            showErrorDialog("Error loading Settings file. Contact to developer on discord!\nDiscord Tag: "+DISCORD_TAG+"\n\n"+e.getMessage(), "Error loading settings file");
+            System.exit(-1);
         }
 
         try {
             Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException e) {
-            JOptionPane.showMessageDialog(null, "언어 파일을 등록하는 과정에서 오류가 발생했습니다!\n제작자에게 디스코드로 문의해주세요!\nDiscord Tag: Najoan#0135\n\n" +
-                            e.getMessage(),
-                    "오류 발생", JOptionPane.INFORMATION_MESSAGE);
+            showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: "+DISCORD_TAG+"\n\n"+e.getMessage(), "Error loading language file");
+            System.exit(-1);
         }
 
         try {
             update(); //update
-        } catch (JsonEmptyException | URISyntaxException | IOException ignored) {}
+        } catch (JsonEmptyException | URISyntaxException | IOException ignored) {} finally {
+            registerNativeHook();
+            startUI();
+        }
 
-        registerNativeHook();
-
-        startUI();
     } // main
 
     public static void reload() {
         design.dispose();
         startUI();
+    }
+
+    public static void showErrorDialog(String content, String title) {
+        JOptionPane.showMessageDialog(null, content, title, JOptionPane.ERROR_MESSAGE);
     }
 
     private static void startUI() {
