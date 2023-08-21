@@ -22,7 +22,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
 public class AutoClicker extends JPanel {
-    public static final String APP_VERSION = "2.0.0";
+    public static final String APP_VERSION = "2.0.1";
     public static final String DISCORD_TAG = "Najoan#1111";
     static Design design;
 
