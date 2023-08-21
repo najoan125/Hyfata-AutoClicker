@@ -10,5 +10,6 @@
     <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="flatlaf-3.2" level="project" />
     <orderEntry type="library" name="JsonUtility-1.1.0" level="project" />
+    <orderEntry type="library" name="JsonUtility-1.1.1" level="project" />
   </component>
 </module>
