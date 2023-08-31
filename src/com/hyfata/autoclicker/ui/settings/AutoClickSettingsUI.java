@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -229,11 +231,38 @@ public class AutoClickSettingsUI extends JFrame {
     }
 
     private JFormattedTextField getIntTextField() {
+        NumberFormatter formatter = getNumberFormatter();
+        JFormattedTextField textField = new JFormattedTextField(formatter);
+
+        textField.addCaretListener(e -> {
+            int caretPosition = textField.getCaretPosition();
+            int textLength = textField.getText().length();
+
+            if (caretPosition < textLength && textField.getText().equals("0")) {
+                textField.setCaretPosition(textLength);
+            }
+        });
+
+        textField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> {
+                    JTextField tf = (JTextField)e.getSource();
+                    int offset = tf.viewToModel(e.getPoint());
+                    tf.setCaretPosition(offset);
+                });
+            }
+        });
+
+        return textField;
+    }
+
+    private static NumberFormatter getNumberFormatter() {
         NumberFormat format = NumberFormat.getInstance();
         NumberFormatter formatter = new NumberFormatter(format) {
             @Override
             public Object stringToValue(String text) throws ParseException {
-                if (text != null && text.length() == 0) {
+                if (text != null && text.isEmpty()) {
                     return 0L;
                 }
                 return super.stringToValue(text);
@@ -245,19 +274,9 @@ public class AutoClickSettingsUI extends JFrame {
         formatter.setMaximum(Long.MAX_VALUE);
         formatter.setAllowsInvalid(false);
         formatter.setCommitsOnValidEdit(true);
-
-        JFormattedTextField textField = new JFormattedTextField(formatter);
-        textField.addCaretListener(e -> {
-            int caretPosition = textField.getCaretPosition();
-            int textLength = textField.getText().length();
-
-            if (caretPosition < textLength && textField.getText().equals("0")) {
-                textField.setCaretPosition(textLength);
-            }
-        });
-
-        return textField;
+        return formatter;
     }
+
     public static void setAllEnabled(boolean bool) {
         delayUnits.setEnabled(bool);
         mouseButtons.setEnabled(bool);

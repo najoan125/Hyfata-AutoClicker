@@ -78,6 +78,15 @@ public class Design extends JFrame {
         // 5
         tabbedPane.addTab(Locale.getAbout(), getAboutPanel());
 
+        //listener
+        tabbedPane.addChangeListener(e -> {
+            int selectedIndex = tabbedPane.getSelectedIndex();
+            Component selectedComponent = tabbedPane.getComponentAt(selectedIndex);
+            if (selectedComponent != null) {
+                selectedComponent.requestFocusInWindow();
+            }
+        });
+
         add(tabbedPane);
     }
 
