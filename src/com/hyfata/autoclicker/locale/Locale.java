@@ -41,6 +41,11 @@ public class Locale {
     private static String inputPreset;
     private static String cantRenameDefault;
     private static String helpDesc;
+    private static String NativeHookError;
+    private static String UpdateNotSupported;
+    private static String DownloadingUpdateError;
+    private static String RunningUpdateFileError;
+    private static String SavingSettingsError;
 
     public static void setLocale(String loc) throws IOException, JsonEmptyException {
         JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
@@ -77,6 +82,31 @@ public class Locale {
         inputPreset = locale.getString("inputPreset");
         cantRenameDefault = locale.getString("cantRenameDefault");
         helpDesc = locale.getString("helpDesc");
+        NativeHookError = locale.getString("NativeHookError");
+        UpdateNotSupported = locale.getString("UpdateNotSupported");
+        DownloadingUpdateError = locale.getString("DownloadingUpdateError");
+        RunningUpdateFileError = locale.getString("RunningUpdateFileError");
+        SavingSettingsError = locale.getString("SavingSettingsError");
+    }
+
+    public static String getNativeHookError() {
+        return NativeHookError;
+    }
+
+    public static String getUpdateNotSupported() {
+        return UpdateNotSupported;
+    }
+
+    public static String getDownloadingUpdateError() {
+        return DownloadingUpdateError;
+    }
+
+    public static String getRunningUpdateFileError() {
+        return RunningUpdateFileError;
+    }
+
+    public static String getSavingSettingsError() {
+        return SavingSettingsError;
     }
 
     public static String getHelpDesc() {

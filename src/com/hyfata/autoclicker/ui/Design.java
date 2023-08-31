@@ -5,13 +5,16 @@ import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.PresetUI;
+import com.hyfata.autoclicker.utils.UpdateUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
+import com.hyfata.json.exceptions.JsonEmptyException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Design extends JFrame {
     public static final int WIDTH = 450, HEIGHT = 320;
@@ -35,7 +38,7 @@ public class Design extends JFrame {
                     SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
                     SettingsUtil.saveFile();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    AutoClicker.showErrorDialog(ex, Locale.getSavingSettingsError(), "Error saving settings");
                 }
                 System.exit(0);
             }
@@ -46,6 +49,11 @@ public class Design extends JFrame {
         init(title);
         design();
         setVisible(true);
+        UpdateUtil updateUtil;
+        try {
+            updateUtil = new UpdateUtil();
+            updateUtil.showUpdateDialog();
+        } catch (JsonEmptyException | IOException | URISyntaxException ignored) {}
     }
 
     public static JPanel getScrollablePanel(Component view) {
