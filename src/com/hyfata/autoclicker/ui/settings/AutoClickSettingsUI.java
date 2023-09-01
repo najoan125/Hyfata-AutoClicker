@@ -165,7 +165,7 @@ public class AutoClickSettingsUI extends JFrame {
 
         String[] menu = {Locale.getDelayMs(), Locale.getDelayMicros()};
         delayUnits = new JComboBox<>(menu);
-        delayUnits.setPreferredSize(new Dimension(140, 23));
+        delayUnits.setPreferredSize(new Dimension(160, 23));
         delayUnits.setSelectedItem(unit);
         panel.add(delayUnits);
         panels.add(panel);
