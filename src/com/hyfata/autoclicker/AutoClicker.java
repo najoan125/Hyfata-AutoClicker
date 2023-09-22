@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class AutoClicker extends JPanel {
-    public static final String APP_VERSION = "2.0.2";
+    public static final String APP_VERSION = "2.0.3";
     public static final String DISCORD_TAG = "Najoan#1111";
     public static final String CHECK_URL = "http://132.226.170.151/file/Autoclicker/autoclicker.json";
     public static final String UPDATE_JAR_URL = "https://github.com/najoan125/Hyfata-AutoClicker/releases/download/%s/AutoClicker.jar";

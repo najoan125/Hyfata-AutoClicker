@@ -128,7 +128,7 @@ public class PresetUI {
                 return;
             }
 
-            String renamedPreset = JOptionPane.showInputDialog(Locale.getInputPreset());
+            String renamedPreset = JOptionPane.showInputDialog(Locale.getInputPreset(), selectedPreset);
             if (renamedPreset == null) {
                 return;
             }
