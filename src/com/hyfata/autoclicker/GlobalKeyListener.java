@@ -7,7 +7,7 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
-import com.hyfata.autoclicker.ui.settings.PresetUI;
+import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 
 import java.awt.*;
 import java.util.Objects;

@@ -1,8 +1,9 @@
-package com.hyfata.autoclicker.ui.settings;
+package com.hyfata.autoclicker.ui.settings.preset;
 
 import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
@@ -80,7 +81,7 @@ public class PresetUI {
         plus.setPreferredSize(new Dimension(25, 25));
         plus.setFont(plus.getFont().deriveFont(20.0f));
         plus.setMargin(new Insets(0,0,5,0));
-        plus.addActionListener(e -> {
+        plus.addActionListener(_ -> {
             String preset = JOptionPane.showInputDialog(Locale.getInputPreset());
             if (preset == null) {
                 return;
@@ -98,7 +99,7 @@ public class PresetUI {
         delete.setPreferredSize(new Dimension(25,25));
         delete.setFont(delete.getFont().deriveFont(20.0f));
         delete.setMargin(new Insets(0,0,7,0));
-        delete.addActionListener(e -> {
+        delete.addActionListener(_ -> {
             String selectedPreset = presets.getSelectedValue();
             if (selectedPreset == null)
                 return;
@@ -119,7 +120,7 @@ public class PresetUI {
         });
 
         rename = new JButton(Locale.getRename());
-        rename.addActionListener(e -> {
+        rename.addActionListener(_ -> {
             String selectedPreset = presets.getSelectedValue();
             if (selectedPreset == null)
                 return;
@@ -161,7 +162,7 @@ public class PresetUI {
         JPanel panel = new JPanel();
         OK = new JButton("OK");
 
-        OK.addActionListener(e -> {
+        OK.addActionListener(_ -> {
             String preset = presets.getSelectedValue();
             if (preset != null) {
                 loadPreset(preset);

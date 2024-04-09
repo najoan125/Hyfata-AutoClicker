@@ -4,7 +4,7 @@ import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
-import com.hyfata.autoclicker.ui.settings.PresetUI;
+import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 import com.hyfata.autoclicker.utils.UpdateUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
@@ -87,7 +87,7 @@ public class Design extends JFrame {
         tabbedPane.addTab(Locale.getAbout(), getAboutPanel());
 
         //listener
-        tabbedPane.addChangeListener(e -> {
+        tabbedPane.addChangeListener(_ -> {
             int selectedIndex = tabbedPane.getSelectedIndex();
             Component selectedComponent = tabbedPane.getComponentAt(selectedIndex);
             if (selectedComponent != null) {
