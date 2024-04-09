@@ -86,7 +86,7 @@ public class PresetUI {
         JPanel panel = new JPanel();
         OK = new JButton("OK");
 
-        OK.addActionListener(_ -> {
+        OK.addActionListener(e -> {
             String preset = presetList.getSelectedValue();
             if (preset != null) {
                 PresetUtils.loadPreset(preset);
