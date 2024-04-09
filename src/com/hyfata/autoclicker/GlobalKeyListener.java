@@ -7,7 +7,7 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
-import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
+import com.hyfata.autoclicker.ui.settings.preset.PresetUtils;
 
 import java.awt.*;
 import java.util.Objects;
@@ -92,7 +92,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
             AutoClickHandler.isStart = false;
             AutoClickSettingsUI.setAllEnabled(true);
             LanguageUI.setAllEnabled(true);
-            PresetUI.setAllEnabled(true);
+            PresetUtils.setAllEnabled(true);
             AutoClickHandler.executorService.shutdown();
         } else if (!AutoClickSettingsUI.delay.getText().equals("0")) {
             AutoClickHandler.start();
