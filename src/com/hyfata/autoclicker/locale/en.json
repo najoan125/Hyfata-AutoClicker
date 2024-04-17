@@ -31,7 +31,7 @@
   "rename": "Rename...",
   "inputPreset": "Enter the preset name: ",
   "inputPresetEmpty": "Please enter the preset name!",
-  "inputPresetOverwrite": "Preset \"%s\" already exists.\nDo you want to overwrite?",
+  "inputPresetOverwrite": "Preset \"%s\" already exists.\nDo you want to overwrite current settings?",
   "cantRenameDefault": "Default preset cannot be renamed!",
   "helpDesc": "<html>milliSecond: 1/1000 second<br>microSecond: 1/1000 millisecond</html>",
   "NativeHookError": "An error occurred while registering NativeHook!\nContact to developer on discord!",

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SettingsUtil {
-    private static ArrayList<String> presets;
+    private static ArrayList<String> presetNames;
     private static JSONObject settings;
     private static final String FILE_PATH = "Hyfata.AutoClicker.Settings.json";
 
@@ -47,21 +47,29 @@ public class SettingsUtil {
             setCurrentPreset("default");
             loadDefault();
             savePreset("default");
-            loadAllPresets();
+            loadAllPresetNames();
         }
         else if (!settings.has("presets")) {
             settings.put("presets", new JSONObject());
             loadLegacy();
         }
+        else if (settings.has("default")) {
+            settings.put("presets", new JSONObject());
+            setCurrentPreset("default");
+            loadDefault();
+            savePreset("default");
+            loadAllPresetNames();
+        }
         else {
-            loadAllPresets();
+            loadAllPresetNames();
             loadPreset(getCurrentPreset());
         }
     }
 
+    // DO NOT CHANGE
     private static void loadLegacy() {
-        presets = new ArrayList<>();
-        presets.add("default");
+        presetNames = new ArrayList<>();
+        presetNames.add("default");
         ArrayList<String> removeKeys = new ArrayList<>();
         for (String key : settings.keySet()) {
             if (settings.get(key) instanceof JSONObject) {
@@ -69,7 +77,7 @@ public class SettingsUtil {
                     continue;
                 }
                 if (!key.equals("default")) {
-                    presets.add(key);
+                    presetNames.add(key);
                 }
                 JSONObject jsonObject = settings.getJSONObject(key);
                 UserSettings.setDelay(jsonObject.optString("delay","100"));
@@ -88,6 +96,7 @@ public class SettingsUtil {
         loadPreset(getCurrentPreset());
     }
 
+    // able to change
     private static void loadDefault() {
         UserSettings.setDelay("100");
         UserSettings.setDelayUnit("ms");
@@ -97,6 +106,7 @@ public class SettingsUtil {
         UserSettings.setKeyboard(false);
     }
 
+    // able to change
     public static void loadPreset(String preset) {
         JSONObject jsonObject = settings.getJSONObject("presets").getJSONObject(preset);
         UserSettings.setDelay(jsonObject.optString("delay","100"));
@@ -109,6 +119,7 @@ public class SettingsUtil {
 
 
     //must be loaded!
+    // able to change
     public static void savePreset(String preset) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("delay", UserSettings.getDelay());
@@ -120,6 +131,7 @@ public class SettingsUtil {
         settings.getJSONObject("presets").put(preset, jsonObject);
     }
 
+    // able to change
     public static void loadCurrentSettings() {
         UserSettings.setDelay(AutoClickSettingsUI.delay.getValue().toString());
         if (Objects.equals(AutoClickSettingsUI.delayUnits.getSelectedItem(), Locale.getDelayMs())){
@@ -167,13 +179,13 @@ public class SettingsUtil {
     public static void setLang(String lang) {
         settings.put("lang",lang);
     }
-    private static void loadAllPresets() {
-        presets = new ArrayList<>();
-        presets.add("default");
+    private static void loadAllPresetNames() {
+        presetNames = new ArrayList<>();
+        presetNames.add("default");
         for (String key : settings.getJSONObject("presets").keySet()) {
             if (settings.getJSONObject("presets").get(key) instanceof JSONObject) {
                 if (!key.equals("default"))
-                    presets.add(key);
+                    presetNames.add(key);
             }
         }
     }
@@ -181,22 +193,22 @@ public class SettingsUtil {
     public static void addPreset(String preset) {
         loadCurrentSettings();
         savePreset(preset);
-        presets.add(preset);
+        presetNames.add(preset);
     }
 
     public static void renamePreset(String preset, String name) {
         loadPreset(preset);
         removePreset(preset);
         savePreset(name);
-        presets.add(name);
+        presetNames.add(name);
     }
 
     public static void removePreset(String preset) {
-        presets.remove(preset);
+        presetNames.remove(preset);
         settings.getJSONObject("presets").remove(preset);
     }
 
-    public static ArrayList<String> getPresets() {
-        return presets;
+    public static ArrayList<String> getPresetNames() {
+        return presetNames;
     }
 }

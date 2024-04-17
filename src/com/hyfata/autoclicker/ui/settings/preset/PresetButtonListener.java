@@ -18,7 +18,7 @@ public class PresetButtonListener {
             DialogUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
             plusListener();
         }
-        else if (SettingsUtil.getPresets().contains(preset)) {
+        else if (SettingsUtil.getPresetNames().contains(preset)) {
             int answer = JOptionPane.showConfirmDialog(null, Locale.getInputPresetOverwrite().replace("%s", preset), "Preset already exists", JOptionPane.YES_NO_OPTION);
             if (answer == JOptionPane.YES_OPTION) {
                 SettingsUtil.removePreset(preset);
@@ -66,7 +66,7 @@ public class PresetButtonListener {
             return;
         }
         renamedPreset = renamedPreset.trim();
-        if (!renamedPreset.isEmpty() && !SettingsUtil.getPresets().contains(renamedPreset)) {
+        if (!renamedPreset.isEmpty() && !SettingsUtil.getPresetNames().contains(renamedPreset)) {
             if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
                 SettingsUtil.addPreset(renamedPreset);
                 PresetUI.presetListModel.addElement(renamedPreset);

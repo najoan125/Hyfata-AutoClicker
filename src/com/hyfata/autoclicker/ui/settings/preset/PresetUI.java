@@ -61,7 +61,7 @@ public class PresetUI {
         presetListModel = new DefaultListModel<>();
         presetList = new JList<>(presetListModel);
         presetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        for (String s : SettingsUtil.getPresets()) {
+        for (String s : SettingsUtil.getPresetNames()) {
             presetListModel.addElement(s);
         }
 
