@@ -39,6 +39,7 @@ public class Locale {
     private static String cantRemoveDefault;
     private static String rename;
     private static String inputPreset;
+    private static String inputPresetEmpty;
     private static String cantRenameDefault;
     private static String helpDesc;
     private static String NativeHookError;
@@ -80,6 +81,7 @@ public class Locale {
         cantRemoveDefault = locale.getString("cantRemoveDefault");
         rename = locale.getString("rename");
         inputPreset = locale.getString("inputPreset");
+        inputPresetEmpty = locale.getString("inputPresetEmpty");
         cantRenameDefault = locale.getString("cantRenameDefault");
         helpDesc = locale.getString("helpDesc");
         NativeHookError = locale.getString("NativeHookError");
@@ -119,6 +121,10 @@ public class Locale {
 
     public static String getInputPreset() {
         return inputPreset;
+    }
+
+    public static String getInputPresetEmpty() {
+        return inputPresetEmpty;
     }
 
     public static String getRename() {

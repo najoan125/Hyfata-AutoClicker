@@ -3,6 +3,7 @@ package com.hyfata.autoclicker.ui.settings;
 import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.utils.DialogUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
 
@@ -86,7 +87,7 @@ public class LanguageUI {
         try {
             Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException ex) {
-            AutoClicker.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: "+AutoClicker.DISCORD_TAG+"\n\n"+ex.getMessage(), "Error loading language file");
+            DialogUtil.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: "+AutoClicker.DISCORD_TAG+"\n\n"+ex.getMessage(), "Error loading language file");
             System.exit(-1);
         }
         AutoClicker.reload();

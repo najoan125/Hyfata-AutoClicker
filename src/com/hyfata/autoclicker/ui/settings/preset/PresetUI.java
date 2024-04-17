@@ -16,6 +16,10 @@ public class PresetUI {
     protected static JButton OK, plus, delete, rename;
     protected static JLabel currentPresetLabel;
 
+    protected static final int presetListWidMin = 140;
+    protected static final int presetListWidMax = 400;
+    protected static final int presetScrollPaneHeight = 90;
+
     private final ArrayList<JPanel> panels = new ArrayList<>();
     private final HashMap<Integer, Integer> addedHeights = new HashMap<>(); //index, height
 
@@ -62,7 +66,7 @@ public class PresetUI {
         }
 
         presetScrollPane = new JScrollPane(presetList);
-        presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetsWidth(), 90));
+        presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetListWidth(), presetScrollPaneHeight));
 
         JPanel scrollPanel = Design.getScrollablePanel(presetScrollPane);
         panels.add(scrollPanel);

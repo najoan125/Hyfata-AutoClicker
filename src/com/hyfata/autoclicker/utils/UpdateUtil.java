@@ -69,14 +69,14 @@ public class UpdateUtil {
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             fos.close();
         } catch (IOException e) {
-            AutoClicker.showErrorDialog(e, Locale.getDownloadingUpdateError(),"Error downloading update");
+            DialogUtil.showErrorDialog(e, Locale.getDownloadingUpdateError(),"Error downloading update");
         }
 
         try {
             Runtime.getRuntime().exec(file);
             System.exit(1);
         } catch (IOException e) {
-            AutoClicker.showErrorDialog(e, Locale.getRunningUpdateFileError(),"Error running update file");
+            DialogUtil.showErrorDialog(e, Locale.getRunningUpdateFileError(),"Error running update file");
         }
     }
 }

@@ -13,10 +13,10 @@ public class PresetUtils {
         PresetUI.rename.setEnabled(bool);
     }
 
-    protected static int getPresetsWidth() {
+    protected static int getPresetListWidth() {
         int width = PresetUI.presetList.getPreferredSize().width;
-        if (width >= 400) width = 400;
-        return Math.max(width, 140);
+        if (width >= PresetUI.presetListWidMax) width = PresetUI.presetListWidMax;
+        return Math.max(width, PresetUI.presetListWidMin);
     }
 
     protected static void loadPreset(String preset) {
