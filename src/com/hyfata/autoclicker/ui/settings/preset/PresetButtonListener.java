@@ -19,7 +19,12 @@ public class PresetButtonListener {
             plusListener();
         }
         else if (SettingsUtil.getPresets().contains(preset)) {
-            //TODO: 유효성 검사
+            int answer = JOptionPane.showConfirmDialog(null, Locale.getInputPresetOverwrite().replace("%s", preset), "Preset already exists", JOptionPane.YES_NO_OPTION);
+            if (answer == JOptionPane.YES_OPTION) {
+                SettingsUtil.removePreset(preset);
+                SettingsUtil.addPreset(preset);
+                PresetUtils.loadPreset(preset);
+            }
         }
         else {
             SettingsUtil.addPreset(preset);
