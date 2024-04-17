@@ -1,6 +1,7 @@
 package com.hyfata.autoclicker.ui.settings;
 
 import com.hyfata.autoclicker.AutoClicker;
+import com.hyfata.autoclicker.locale.Languages;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.utils.DialogUtil;
@@ -18,6 +19,8 @@ public class LanguageUI {
     static JButton OK;
     ArrayList<JPanel> panels = new ArrayList<>();
     HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
+    Languages languages = new Languages();
+
     public JPanel getPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         initPanels();
@@ -52,7 +55,7 @@ public class LanguageUI {
 
     private void languageList() {
         JPanel panel = new JPanel();
-        list = new JList<>(new String[]{"한국어","English"});
+        list = new JList<>(languages.getLanguageNames());
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(list);
         JScrollPane scrollPane = new JScrollPane(list);
@@ -68,10 +71,11 @@ public class LanguageUI {
         OK.addActionListener(e -> {
             String language = list.getSelectedValue();
             if (language != null) {
-                if (language.equals("한국어")) {
-                    SettingsUtil.setLang("ko.json");
-                } else if (language.equals("English")) {
-                    SettingsUtil.setLang("en.json");
+                for (String name : languages.getLanguages().keySet()) {
+                    if (name.equals(language)) {
+                        SettingsUtil.setLang(languages.getLanguages().get(name));
+                        break;
+                    }
                 }
                 setLanguage();
             }

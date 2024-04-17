@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 
 public class Design extends JFrame {
     public static final int WIDTH = 450, HEIGHT = 320;
+    private static Component aboutPanel = null;
 
     private void init(String title) {
         setTitle(title);
@@ -89,7 +90,10 @@ public class Design extends JFrame {
         tabbedPane.addTab(Locale.getHelp(), tab4);
 
         // 5
-        tabbedPane.addTab(Locale.getAbout(), getAboutPanel());
+        if (aboutPanel == null) {
+            aboutPanel = getAboutPanel();
+        }
+        tabbedPane.addTab(Locale.getAbout(), aboutPanel);
 
         //listener
         tabbedPane.addChangeListener(e -> {
@@ -133,9 +137,7 @@ public class Design extends JFrame {
                 if (Desktop.isDesktopSupported()) {
                     try {
                         Desktop.getDesktop().browse(e.getURL().toURI());
-                    } catch (IOException | URISyntaxException ex) {
-                        ex.printStackTrace();
-                    }
+                    } catch (IOException | URISyntaxException ignored) {}
                 }
             }
         });
