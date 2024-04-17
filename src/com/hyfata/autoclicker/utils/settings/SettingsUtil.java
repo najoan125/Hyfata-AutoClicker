@@ -43,16 +43,51 @@ public class SettingsUtil {
     private static void read() {
         setLang(getLang());
         if (!settings.has("preset")) {
+            settings.put("presets", new JSONObject());
             setCurrentPreset("default");
             loadDefault();
             savePreset("default");
             loadAllPresets();
+        }
+        else if (!settings.has("presets")) {
+            settings.put("presets", new JSONObject());
+            loadLegacy();
         }
         else {
             loadAllPresets();
             loadPreset(getCurrentPreset());
         }
     }
+
+    private static void loadLegacy() {
+        presets = new ArrayList<>();
+        presets.add("default");
+        ArrayList<String> removeKeys = new ArrayList<>();
+        for (String key : settings.keySet()) {
+            if (settings.get(key) instanceof JSONObject) {
+                if (key.equals("presets")) {
+                    continue;
+                }
+                if (!key.equals("default")) {
+                    presets.add(key);
+                }
+                JSONObject jsonObject = settings.getJSONObject(key);
+                UserSettings.setDelay(jsonObject.optString("delay","100"));
+                UserSettings.setDelayUnit(jsonObject.optString("delayUnit","ms"));
+                UserSettings.setMouseButton(jsonObject.optString("mouseButton","left"));
+                UserSettings.setToggle(jsonObject.optBoolean("toggle",false));
+                UserSettings.setKeycode(jsonObject.optInt("keycode",-1));
+                UserSettings.setKeyboard(jsonObject.optBoolean("keyboard",false));
+                savePreset(key);
+                removeKeys.add(key);
+            }
+        }
+        for (String key : removeKeys) {
+            settings.remove(key);
+        }
+        loadPreset(getCurrentPreset());
+    }
+
     private static void loadDefault() {
         UserSettings.setDelay("100");
         UserSettings.setDelayUnit("ms");
@@ -63,7 +98,7 @@ public class SettingsUtil {
     }
 
     public static void loadPreset(String preset) {
-        JSONObject jsonObject = settings.getJSONObject(preset);
+        JSONObject jsonObject = settings.getJSONObject("presets").getJSONObject(preset);
         UserSettings.setDelay(jsonObject.optString("delay","100"));
         UserSettings.setDelayUnit(jsonObject.optString("delayUnit","ms"));
         UserSettings.setMouseButton(jsonObject.optString("mouseButton","left"));
@@ -82,7 +117,7 @@ public class SettingsUtil {
         jsonObject.put("toggle", UserSettings.isToggle());
         jsonObject.put("keycode", UserSettings.getKeycode());
         jsonObject.put("keyboard",UserSettings.isKeyboard());
-        settings.put(preset, jsonObject);
+        settings.getJSONObject("presets").put(preset, jsonObject);
     }
 
     public static void loadCurrentSettings() {
@@ -135,8 +170,8 @@ public class SettingsUtil {
     private static void loadAllPresets() {
         presets = new ArrayList<>();
         presets.add("default");
-        for (String key : settings.keySet()) {
-            if (settings.get(key) instanceof JSONObject) {
+        for (String key : settings.getJSONObject("presets").keySet()) {
+            if (settings.getJSONObject("presets").get(key) instanceof JSONObject) {
                 if (!key.equals("default"))
                     presets.add(key);
             }
@@ -158,7 +193,7 @@ public class SettingsUtil {
 
     public static void removePreset(String preset) {
         presets.remove(preset);
-        settings.remove(preset);
+        settings.getJSONObject("presets").remove(preset);
     }
 
     public static ArrayList<String> getPresets() {
