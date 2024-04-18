@@ -36,26 +36,30 @@ public class PresetButtonListener {
 
     protected static void deleteListener() {
         String selectedPreset = PresetUI.presetList.getSelectedValue();
-        if (selectedPreset == null)
+        if (selectedPreset == null) {
+            DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             return;
+        }
         if (selectedPreset.equals("default")) {
             DialogUtil.showErrorDialog(Locale.getCantRemoveDefault(), "Error removing preset");
-        } else if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
-            PresetUtils.loadPreset("default");
-            PresetUI.presetListModel.removeElement(selectedPreset);
-            PresetUI.presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetListWidth(), PresetUI.presetScrollPaneHeight));
-            SettingsUtil.removePreset(selectedPreset);
-        } else {
-            PresetUI.presetListModel.removeElement(selectedPreset);
-            PresetUI.presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetListWidth(), PresetUI.presetScrollPaneHeight));
-            SettingsUtil.removePreset(selectedPreset);
+            return;
         }
+        int answer = JOptionPane.showConfirmDialog(null, Locale.getRemovePresetDialog().replace("%s", selectedPreset), "Remove preset", JOptionPane.YES_NO_OPTION);
+        if (answer == JOptionPane.NO_OPTION) return;
+        if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
+            PresetUtils.loadPreset("default");
+        }
+        PresetUI.presetListModel.removeElement(selectedPreset);
+        PresetUI.presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetListWidth(), PresetUI.presetScrollPaneHeight));
+        SettingsUtil.removePreset(selectedPreset);
     }
 
     protected static void renameListener() {
         String selectedPreset = PresetUI.presetList.getSelectedValue();
-        if (selectedPreset == null)
+        if (selectedPreset == null) {
+            DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             return;
+        }
         if (selectedPreset.equals("default")) {
             DialogUtil.showErrorDialog(Locale.getCantRenameDefault(), "Error renaming preset");
             return;
@@ -63,10 +67,17 @@ public class PresetButtonListener {
 
         String renamedPreset = JOptionPane.showInputDialog(Locale.getInputPreset(), selectedPreset);
         if (renamedPreset == null) {
-            return;
+            return; // cancel
         }
         renamedPreset = renamedPreset.trim();
-        if (!renamedPreset.isEmpty() && !SettingsUtil.getPresetNames().contains(renamedPreset)) {
+        if (renamedPreset.isEmpty()) {
+            DialogUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
+            renameListener();
+        }
+        else if (SettingsUtil.getPresetNames().contains(renamedPreset)) {
+            DialogUtil.showErrorDialog(Locale.getPresetAlreadyExists().replace("%s",renamedPreset), "Preset already exists");
+        }
+        else {
             if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
                 SettingsUtil.addPreset(renamedPreset);
                 PresetUI.presetListModel.addElement(renamedPreset);

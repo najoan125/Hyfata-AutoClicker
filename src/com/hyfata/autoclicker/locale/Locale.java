@@ -41,7 +41,10 @@ public class Locale {
     private static String inputPreset;
     private static String inputPresetEmpty;
     private static String inputPresetOverwrite;
+    private static String presetNotSelected;
+    private static String removePresetDialog;
     private static String cantRenameDefault;
+    private static String presetAlreadyExists;
     private static String helpDesc;
     private static String NativeHookError;
     private static String UpdateNotSupported;
@@ -84,7 +87,10 @@ public class Locale {
         inputPreset = locale.getString("inputPreset");
         inputPresetEmpty = locale.getString("inputPresetEmpty");
         inputPresetOverwrite = locale.getString("inputPresetOverwrite");
+        presetNotSelected = locale.getString("presetNotSelected");
+        removePresetDialog = locale.getString("removePresetDialog");
         cantRenameDefault = locale.getString("cantRenameDefault");
+        presetAlreadyExists = locale.getString("presetAlreadyExists");
         helpDesc = locale.getString("helpDesc");
         NativeHookError = locale.getString("NativeHookError");
         UpdateNotSupported = locale.getString("UpdateNotSupported");
@@ -133,6 +139,14 @@ public class Locale {
         return inputPresetOverwrite;
     }
 
+    public static String getPresetNotSelected() {
+        return presetNotSelected;
+    }
+
+    public static String getRemovePresetDialog() {
+        return removePresetDialog;
+    }
+
     public static String getRename() {
         return rename;
     }
@@ -143,6 +157,10 @@ public class Locale {
 
     public static String getCantRemoveDefault() {
         return cantRemoveDefault;
+    }
+
+    public static String getPresetAlreadyExists() {
+        return presetAlreadyExists;
     }
 
     public static String getReset() {

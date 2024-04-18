@@ -2,6 +2,7 @@ package com.hyfata.autoclicker.ui.settings.preset;
 
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.utils.DialogUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
@@ -94,6 +95,8 @@ public class PresetUI {
             String preset = presetList.getSelectedValue();
             if (preset != null) {
                 PresetUtils.loadPreset(preset);
+            } else {
+                DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             }
         });
         panel.add(OK);
