@@ -1,6 +1,7 @@
 package com.hyfata.autoclicker.ui.settings;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.hyfata.autoclicker.AutoClickHandler;
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
@@ -17,13 +18,17 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AutoClickSettingsUI extends JFrame {
     public static JFormattedTextField delay;
     public static JComboBox<String> delayUnits, mouseButtons, holdToggles;
     public static JButton changeKeyButton, resetButton;
-    public static JLabel key = null;
+    public static JLabel key = null, clicks = new JLabel();
     public static JDialog changingKeyDialog;
+    private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     ArrayList<JPanel> panels = new ArrayList<>();
     HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
     public JPanel getPanel() {
@@ -51,6 +56,8 @@ public class AutoClickSettingsUI extends JFrame {
 
 
     private void initPanels() {
+        clicks();
+        executorService.scheduleAtFixedRate(this::calculateClicks, 0, 17, TimeUnit.MILLISECONDS);
         String delayUnit;
         if (Objects.equals(UserSettings.getDelayUnit(), "ms")) {
             delayUnit = Locale.getDelayMs();
@@ -152,6 +159,16 @@ public class AutoClickSettingsUI extends JFrame {
         else {
             key.setText(" (" + Locale.getMouseButtonCode()+": " + keycode + ")");
         }
+    }
+
+    private void calculateClicks() {
+        clicks.setText(AutoClickHandler.clicks.toString());
+    }
+
+    private void clicks() {
+        JPanel panel = new JPanel();
+        panel.add(clicks);
+        panels.add(panel);
     }
 
     private void delay(int defaultDelay, String unit) {

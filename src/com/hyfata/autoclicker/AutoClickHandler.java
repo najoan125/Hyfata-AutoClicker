@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutoClickHandler {
     //Robot 객체 생성
@@ -25,6 +26,7 @@ public class AutoClickHandler {
     //짧은 시간 동안 딜레이를 주기 위한 라이브러리
     public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
+    public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
 
     private static boolean left, middle, right;
     private static long delay;
@@ -81,6 +83,7 @@ public class AutoClickHandler {
     private static void startMacroLeft() {
         r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        int current = clicks.incrementAndGet();
     }
 
     private static void startMacroRight() {
