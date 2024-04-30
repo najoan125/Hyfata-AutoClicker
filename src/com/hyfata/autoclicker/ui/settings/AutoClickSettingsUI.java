@@ -28,9 +28,10 @@ public class AutoClickSettingsUI extends JFrame {
     public static JButton changeKeyButton, resetButton;
     public static JLabel key = null, clicks = new JLabel();
     public static JDialog changingKeyDialog;
+
     private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    ArrayList<JPanel> panels = new ArrayList<>();
-    HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
+    private final ArrayList<JPanel> panels = new ArrayList<>();
+    private final HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
     public JPanel getPanel() {
         JPanel panel = new JPanel(null);
         initPanels();
@@ -58,6 +59,7 @@ public class AutoClickSettingsUI extends JFrame {
     private void initPanels() {
         clicks();
         executorService.scheduleAtFixedRate(this::calculateClicks, 0, 17, TimeUnit.MILLISECONDS);
+
         String delayUnit;
         if (Objects.equals(UserSettings.getDelayUnit(), "ms")) {
             delayUnit = Locale.getDelayMs();
@@ -168,6 +170,7 @@ public class AutoClickSettingsUI extends JFrame {
     private void clicks() {
         JPanel panel = new JPanel();
         panel.add(clicks);
+        addHeight(-10);
         panels.add(panel);
     }
 
@@ -185,6 +188,7 @@ public class AutoClickSettingsUI extends JFrame {
         delayUnits.setPreferredSize(new Dimension(160, 23));
         delayUnits.setSelectedItem(unit);
         panel.add(delayUnits);
+        addHeight(-10);
         panels.add(panel);
     }
 

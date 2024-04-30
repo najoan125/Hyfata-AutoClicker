@@ -89,10 +89,12 @@ public class AutoClickHandler {
     private static void startMacroRight() {
         r.mousePress(InputEvent.BUTTON3_DOWN_MASK);
         r.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+        int current = clicks.incrementAndGet();
     }
 
     private static void startMacroMiddle() {
         r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
         r.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
+        int current = clicks.incrementAndGet();
     }
 }
