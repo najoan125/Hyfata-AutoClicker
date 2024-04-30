@@ -169,6 +169,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void clicks() {
         JPanel panel = new JPanel();
+        clicks.setForeground(Color.LIGHT_GRAY);
         panel.add(clicks);
         addHeight(-10);
         panels.add(panel);
