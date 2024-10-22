@@ -51,6 +51,7 @@ public class Locale {
     private static String DownloadingUpdateError;
     private static String RunningUpdateFileError;
     private static String SavingSettingsError;
+    private static String totalClicks;
 
     public static void setLocale(String loc) throws IOException, JsonEmptyException {
         JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
@@ -97,6 +98,7 @@ public class Locale {
         DownloadingUpdateError = locale.getString("DownloadingUpdateError");
         RunningUpdateFileError = locale.getString("RunningUpdateFileError");
         SavingSettingsError = locale.getString("SavingSettingsError");
+        totalClicks = locale.getString("TotalClicks");
     }
 
     public static String getNativeHookError() {
@@ -267,5 +269,9 @@ public class Locale {
 
     public static String getChangeKey() {
         return changeKey;
+    }
+
+    public static String getTotalClicks() {
+        return totalClicks;
     }
 }

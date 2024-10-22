@@ -58,7 +58,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void initPanels() {
         clicks();
-        executorService.scheduleAtFixedRate(this::calculateClicks, 0, 17, TimeUnit.MILLISECONDS);
+        executorService.scheduleAtFixedRate(this::calculateClicks, 0, 10, TimeUnit.MILLISECONDS); // refresh ui
 
         String delayUnit;
         if (Objects.equals(UserSettings.getDelayUnit(), "ms")) {
@@ -170,8 +170,8 @@ public class AutoClickSettingsUI extends JFrame {
     private void clicks() {
         JPanel panel = new JPanel();
         clicks.setForeground(Color.LIGHT_GRAY);
+        panel.add(new JLabel(Locale.getTotalClicks()));
         panel.add(clicks);
-        addHeight(-10);
         panels.add(panel);
     }
 
@@ -189,7 +189,6 @@ public class AutoClickSettingsUI extends JFrame {
         delayUnits.setPreferredSize(new Dimension(160, 23));
         delayUnits.setSelectedItem(unit);
         panel.add(delayUnits);
-        addHeight(-10);
         panels.add(panel);
     }
 
