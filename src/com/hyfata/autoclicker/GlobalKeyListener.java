@@ -25,7 +25,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode) {
             String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
             if (holdToggle.equals(Locale.getKeyHold())){
-                startOrStop();
+                toggleAutoClick();
                 isPressed = true;
             }
         }
@@ -34,7 +34,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public void nativeKeyReleased(NativeKeyEvent e) {
         int key = e.getKeyCode();
         if (keycode != null && key == keycode && !isChanging && isKeyboard) {
-            startOrStop();
+            toggleAutoClick();
             isPressed = false;
         }
 
@@ -62,7 +62,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode) {
             String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
             if (holdToggle.equals(Locale.getKeyHold())){
-                startOrStop();
+                toggleAutoClick();
                 isPressed = true;
             }
         }
@@ -73,7 +73,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public void nativeMouseReleased(NativeMouseEvent e) {
         int key = e.getButton();
         if (keycode != null && key == keycode && !isChanging && !isKeyboard) {
-            startOrStop();
+            toggleAutoClick();
             isPressed = false;
         }
 
@@ -87,7 +87,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         }
     }
     //mouse
-    private static void startOrStop() {
+    private static void toggleAutoClick() {
         if (AutoClickHandler.isStart) {
             AutoClickHandler.isStart = false;
             AutoClickSettingsUI.setAllEnabled(true);

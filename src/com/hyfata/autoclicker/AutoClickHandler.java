@@ -4,6 +4,7 @@ import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUtils;
+import com.hyfata.autoclicker.utils.DialogUtil;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -28,10 +29,7 @@ public class AutoClickHandler {
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
 
-    private static long delay;
-
     private static void init() {
-        delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
         AutoClickSettingsUI.setAllEnabled(false);
         LanguageUI.setAllEnabled(false);
         PresetUtils.setAllEnabled(false);
@@ -41,11 +39,14 @@ public class AutoClickHandler {
         init();
         isStart = true;
 
+        long delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
         TimeUnit timeUnit = getTimeUnit();
         Runnable runnable = getRunnable();
 
         if (runnable != null) {
             macroExecutor.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
+        } else {
+            DialogUtil.showErrorDialog("Error in Mouse button", "Runnable Error");
         }
     } // start()
 
