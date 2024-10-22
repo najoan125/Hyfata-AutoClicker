@@ -36,7 +36,7 @@
   "removePresetDialog": "Are you sure you want to remove preset \"%s\"?",
   "cantRenameDefault": "Default preset cannot be renamed!",
   "presetAlreadyExists": "Preset \"%s\" already exists. Please try a different name or remove the preset.",
-  "helpDesc": "<html>milliSecond: 1/1000 second<br>microSecond: 1/1000 millisecond</html>",
+  "helpDesc": "<html>1 milliSecond = 1/1000 second<br>1 microSecond = 1/1000 millisecond</html>",
   "NativeHookError": "An error occurred while registering NativeHook!\nContact to developer on discord!",
   "UpdateNotSupported": "Unfortunately, this device is not supported. Please install the update yourself.",
   "DownloadingUpdateError": "Problem downloading update!",
