@@ -1,5 +1,6 @@
 package com.hyfata.autoclicker.ui.settings.preset;
 
+import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.utils.DialogUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
@@ -9,7 +10,10 @@ import java.awt.*;
 
 public class PresetButtonListener {
     protected static void plusListener() {
+        GlobalKeyListener.shouldBlocked = true;
         String preset = JOptionPane.showInputDialog(Locale.getInputPreset());
+        GlobalKeyListener.shouldBlocked = false;
+
         if (preset == null) {
             return; //cancel
         }
@@ -65,7 +69,10 @@ public class PresetButtonListener {
             return;
         }
 
+        GlobalKeyListener.shouldBlocked = true;
         String renamedPreset = JOptionPane.showInputDialog(Locale.getInputPreset(), selectedPreset);
+        GlobalKeyListener.shouldBlocked = false;
+
         if (renamedPreset == null) {
             return; // cancel
         }

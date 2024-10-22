@@ -16,13 +16,14 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     static boolean isPressed = false;
     public static boolean isKeyboard = true;
     public static boolean isChanging = false;
+    public static boolean shouldBlocked = false;
     public static Integer keycode = null;
 
     //keyboard
     @Override
     public void nativeKeyPressed(NativeKeyEvent e){
         int key = e.getKeyCode();
-        if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode) {
+        if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
             String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
             if (holdToggle.equals(Locale.getKeyHold())){
                 toggleAutoClick();
@@ -33,7 +34,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
         int key = e.getKeyCode();
-        if (keycode != null && key == keycode && !isChanging && isKeyboard) {
+        if (keycode != null && key == keycode && !isChanging && isKeyboard && !shouldBlocked) {
             toggleAutoClick();
             isPressed = false;
         }
@@ -59,7 +60,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     @Override
     public void nativeMousePressed(NativeMouseEvent e) {
         int key = e.getButton();
-        if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode) {
+        if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
             String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
             if (holdToggle.equals(Locale.getKeyHold())){
                 toggleAutoClick();
@@ -72,7 +73,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     @Override
     public void nativeMouseReleased(NativeMouseEvent e) {
         int key = e.getButton();
-        if (keycode != null && key == keycode && !isChanging && !isKeyboard) {
+        if (keycode != null && key == keycode && !isChanging && !isKeyboard && !shouldBlocked) {
             toggleAutoClick();
             isPressed = false;
         }
