@@ -28,13 +28,11 @@ public class SettingsUtil {
             } finally {
                 read();
             }
-        }
-        else {
+        } else {
             settings = new JSONObject();
             if (f.createNewFile()) {
                 read();
-            }
-            else {
+            } else {
                 throw new IOException("File already exists");
             }
         }
@@ -48,19 +46,16 @@ public class SettingsUtil {
             loadDefault();
             savePreset("default");
             loadAllPresetNames();
-        }
-        else if (!settings.has("presets")) {
+        } else if (!settings.has("presets")) {
             settings.put("presets", new JSONObject());
             loadLegacy();
-        }
-        else if (settings.has("default")) {
+        } else if (settings.has("default")) {
             settings.put("presets", new JSONObject());
             setCurrentPreset("default");
             loadDefault();
             savePreset("default");
             loadAllPresetNames();
-        }
-        else {
+        } else {
             loadAllPresetNames();
             loadPreset(getCurrentPreset());
         }
@@ -80,12 +75,12 @@ public class SettingsUtil {
                     presetNames.add(key);
                 }
                 JSONObject jsonObject = settings.getJSONObject(key);
-                UserSettings.setDelay(jsonObject.optString("delay","100"));
-                UserSettings.setDelayUnit(jsonObject.optString("delayUnit","ms"));
-                UserSettings.setMouseButton(jsonObject.optString("mouseButton","left"));
-                UserSettings.setToggle(jsonObject.optBoolean("toggle",false));
-                UserSettings.setKeycode(jsonObject.optInt("keycode",-1));
-                UserSettings.setKeyboard(jsonObject.optBoolean("keyboard",false));
+                UserSettings.setDelay(jsonObject.optString("delay", "100"));
+                UserSettings.setDelayUnit(jsonObject.optString("delayUnit", "ms"));
+                UserSettings.setMouseButton(jsonObject.optString("mouseButton", "left"));
+                UserSettings.setToggle(jsonObject.optBoolean("toggle", false));
+                UserSettings.setKeycode(jsonObject.optInt("keycode", -1));
+                UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
                 savePreset(key);
                 removeKeys.add(key);
             }
@@ -109,12 +104,12 @@ public class SettingsUtil {
     // able to change
     public static void loadPreset(String preset) {
         JSONObject jsonObject = settings.getJSONObject("presets").getJSONObject(preset);
-        UserSettings.setDelay(jsonObject.optString("delay","100"));
-        UserSettings.setDelayUnit(jsonObject.optString("delayUnit","ms"));
-        UserSettings.setMouseButton(jsonObject.optString("mouseButton","left"));
-        UserSettings.setToggle(jsonObject.optBoolean("toggle",false));
-        UserSettings.setKeycode(jsonObject.optInt("keycode",-1));
-        UserSettings.setKeyboard(jsonObject.optBoolean("keyboard",false));
+        UserSettings.setDelay(jsonObject.optString("delay", "100"));
+        UserSettings.setDelayUnit(jsonObject.optString("delayUnit", "ms"));
+        UserSettings.setMouseButton(jsonObject.optString("mouseButton", "left"));
+        UserSettings.setToggle(jsonObject.optBoolean("toggle", false));
+        UserSettings.setKeycode(jsonObject.optInt("keycode", -1));
+        UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
     }
 
 
@@ -127,27 +122,24 @@ public class SettingsUtil {
         jsonObject.put("mouseButton", UserSettings.getMouseButton());
         jsonObject.put("toggle", UserSettings.isToggle());
         jsonObject.put("keycode", UserSettings.getKeycode());
-        jsonObject.put("keyboard",UserSettings.isKeyboard());
+        jsonObject.put("keyboard", UserSettings.isKeyboard());
         settings.getJSONObject("presets").put(preset, jsonObject);
     }
 
     // able to change
     public static void loadCurrentSettings() {
         UserSettings.setDelay(AutoClickSettingsUI.delay.getValue().toString());
-        if (Objects.equals(AutoClickSettingsUI.delayUnits.getSelectedItem(), Locale.getDelayMs())){
+        if (Objects.equals(AutoClickSettingsUI.delayUnits.getSelectedItem(), Locale.getDelayMs())) {
             UserSettings.setDelayUnit("ms");
-        }
-        else {
+        } else {
             UserSettings.setDelayUnit("micros");
         }
 
         if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseLeft())) {
             UserSettings.setMouseButton("left");
-        }
-        else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseMiddle())) {
+        } else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseMiddle())) {
             UserSettings.setMouseButton("middle");
-        }
-        else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseRight())) {
+        } else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseRight())) {
             UserSettings.setMouseButton("right");
         }
 
@@ -155,8 +147,7 @@ public class SettingsUtil {
 
         if (GlobalKeyListener.keycode == null) {
             UserSettings.setKeycode(-1);
-        }
-        else {
+        } else {
             UserSettings.setKeycode(GlobalKeyListener.keycode);
         }
 
@@ -164,21 +155,25 @@ public class SettingsUtil {
     }
 
     public static void saveFile() throws IOException {
-        JsonWriter.writeToFile(settings,FILE_PATH);
+        JsonWriter.writeToFile(settings, FILE_PATH);
     }
 
     public static String getCurrentPreset() {
         return settings.getString("preset");
     }
+
     public static void setCurrentPreset(String preset) {
-        settings.put("preset",preset);
+        settings.put("preset", preset);
     }
+
     public static String getLang() {
-        return settings.optString("lang","en.json");
+        return settings.optString("lang", "en.json");
     }
+
     public static void setLang(String lang) {
-        settings.put("lang",lang);
+        settings.put("lang", lang);
     }
+
     private static void loadAllPresetNames() {
         presetNames = new ArrayList<>();
         presetNames.add("default");
