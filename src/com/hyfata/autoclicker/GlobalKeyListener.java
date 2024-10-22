@@ -93,7 +93,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
             AutoClickSettingsUI.setAllEnabled(true);
             LanguageUI.setAllEnabled(true);
             PresetUtils.setAllEnabled(true);
-            AutoClickHandler.executorService.shutdown();
+            AutoClickHandler.macroExecutor.shutdown();
         } else if (!AutoClickSettingsUI.delay.getText().equals("0")) {
             AutoClickHandler.start();
         }

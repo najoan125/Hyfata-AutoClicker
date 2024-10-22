@@ -24,11 +24,10 @@ public class AutoClickHandler {
         }
     }
     //짧은 시간 동안 딜레이를 주기 위한 라이브러리
-    public static ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    public static ScheduledExecutorService macroExecutor = Executors.newSingleThreadScheduledExecutor();
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
 
-    private static boolean left, middle, right;
     private static long delay;
 
     private static void init() {
@@ -36,48 +35,43 @@ public class AutoClickHandler {
         AutoClickSettingsUI.setAllEnabled(false);
         LanguageUI.setAllEnabled(false);
         PresetUtils.setAllEnabled(false);
-        left = false;
-        middle = false;
-        right = false;
-        executorService = Executors.newSingleThreadScheduledExecutor();
+        macroExecutor = Executors.newSingleThreadScheduledExecutor();
     }
     public static void start() {
         init();
         isStart = true;
 
-        String mouseButton = Objects.requireNonNull(AutoClickSettingsUI.mouseButtons.getSelectedItem()).toString();
-        String delayUnit = Objects.requireNonNull(AutoClickSettingsUI.delayUnits.getSelectedItem()).toString();
+        TimeUnit timeUnit = getTimeUnit();
+        Runnable runnable = getRunnable();
 
-        if (Objects.equals(mouseButton, Locale.getMouseLeft()))
-            left = true;
-        else if (Objects.equals(mouseButton, Locale.getMouseMiddle()))
-            middle = true;
-        else if (Objects.equals(mouseButton, Locale.getMouseRight()))
-            right = true;
-
-        //자동 클릭 매크로 시작
-        if (Objects.equals(delayUnit, Locale.getDelayMs())) {
-            if (left)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroLeft, 0, delay,
-                        TimeUnit.MILLISECONDS);
-            else if (middle)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroMiddle, 0, delay,
-                        TimeUnit.MILLISECONDS);
-            else if (right)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroRight, 0, delay,
-                        TimeUnit.MILLISECONDS);
-        } else if (Objects.equals(delayUnit, Locale.getDelayMicros())) {
-            if (left)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroLeft, 0, delay,
-                        TimeUnit.MICROSECONDS);
-            else if (middle)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroMiddle, 0, delay,
-                        TimeUnit.MICROSECONDS);
-            else if (right)
-                executorService.scheduleAtFixedRate(AutoClickHandler::startMacroRight, 0, delay,
-                        TimeUnit.MICROSECONDS);
+        if (runnable != null) {
+            macroExecutor.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
         }
     } // start()
+
+    private static TimeUnit getTimeUnit() {
+        String delayUnit = Objects.requireNonNull(AutoClickSettingsUI.delayUnits.getSelectedItem()).toString();
+        if (Objects.equals(delayUnit, Locale.getDelayMs())) {
+            return TimeUnit.MILLISECONDS;
+        }
+        return TimeUnit.MICROSECONDS;
+    }
+
+    private static Runnable getRunnable() {
+        String mouseButton = Objects.requireNonNull(AutoClickSettingsUI.mouseButtons.getSelectedItem()).toString();
+        boolean left = mouseButton.equals(Locale.getMouseLeft());
+        boolean middle = mouseButton.equals(Locale.getMouseMiddle());
+        boolean right = mouseButton.equals(Locale.getMouseRight());
+
+        if (left) {
+            return AutoClickHandler::startMacroLeft;
+        } else if (middle) {
+            return AutoClickHandler::startMacroMiddle;
+        } else if (right) {
+            return AutoClickHandler::startMacroRight;
+        }
+        return null;
+    }
 
     //자동 클릭 매크로 실행(메서드 반복)
     private static void startMacroLeft() {
