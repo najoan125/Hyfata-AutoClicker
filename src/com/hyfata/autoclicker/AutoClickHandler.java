@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutoClickHandler {
@@ -29,10 +30,13 @@ public class AutoClickHandler {
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
 
+    private static final AtomicBoolean clicked = new AtomicBoolean(false);
+
     private static void init() {
         AutoClickSettingsUI.setAllEnabled(false);
         LanguageUI.setAllEnabled(false);
         PresetUtils.setAllEnabled(false);
+        clicked.set(false);
         macroExecutor = Executors.newSingleThreadScheduledExecutor();
     }
     public static void start() {
@@ -40,8 +44,13 @@ public class AutoClickHandler {
         isStart = true;
 
         long delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
+        boolean legacy = true;
+        if (delay > 1) {
+            delay /= 2L;
+            legacy = false;
+        }
         TimeUnit timeUnit = getTimeUnit();
-        Runnable runnable = getRunnable();
+        Runnable runnable = getRunnable(legacy);
 
         if (runnable != null) {
             macroExecutor.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
@@ -58,38 +67,48 @@ public class AutoClickHandler {
         return TimeUnit.MICROSECONDS;
     }
 
-    private static Runnable getRunnable() {
+    private static Runnable getRunnable(boolean legacy) {
         String mouseButton = Objects.requireNonNull(AutoClickSettingsUI.mouseButtons.getSelectedItem()).toString();
         boolean left = mouseButton.equals(Locale.getMouseLeft());
         boolean middle = mouseButton.equals(Locale.getMouseMiddle());
         boolean right = mouseButton.equals(Locale.getMouseRight());
 
+        int button;
+
         if (left) {
-            return AutoClickHandler::startMacroLeft;
+            button = InputEvent.BUTTON1_DOWN_MASK;
         } else if (middle) {
-            return AutoClickHandler::startMacroMiddle;
+            button = InputEvent.BUTTON2_DOWN_MASK;
         } else if (right) {
-            return AutoClickHandler::startMacroRight;
+            button = InputEvent.BUTTON3_DOWN_MASK;
+        } else {
+            button = 0;
+        }
+
+        if (button != 0) {
+            if (legacy) {
+                return () -> startLegacyMacro(button);
+            }
+            return () -> startMacro(button);
         }
         return null;
     }
 
     //자동 클릭 매크로 실행(메서드 반복)
-    private static void startMacroLeft() {
-        r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        int current = clicks.incrementAndGet();
+    private static void startMacro(int button) {
+        if (!clicked.get()) {
+            r.mousePress(button);
+            clicked.set(true);
+            int current = clicks.incrementAndGet();
+        } else {
+            r.mouseRelease(button);
+            clicked.set(false);
+        }
     }
 
-    private static void startMacroRight() {
-        r.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-        r.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-        int current = clicks.incrementAndGet();
-    }
-
-    private static void startMacroMiddle() {
-        r.mousePress(InputEvent.BUTTON2_DOWN_MASK);
-        r.mouseRelease(InputEvent.BUTTON2_DOWN_MASK);
+    private static void startLegacyMacro(int button) {
+        r.mousePress(button);
+        r.mouseRelease(button);
         int current = clicks.incrementAndGet();
     }
 }
