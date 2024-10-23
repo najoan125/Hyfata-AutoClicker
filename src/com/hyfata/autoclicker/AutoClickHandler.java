@@ -26,11 +26,12 @@ public class AutoClickHandler {
         }
     }
     //짧은 시간 동안 딜레이를 주기 위한 라이브러리
-    public static ScheduledExecutorService macroExecutor = Executors.newSingleThreadScheduledExecutor();
+    private static ScheduledExecutorService macroExecutor = Executors.newSingleThreadScheduledExecutor();
+    private static final AtomicBoolean clicked = new AtomicBoolean(false);
+    private static int macroButton;
+
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
-
-    private static final AtomicBoolean clicked = new AtomicBoolean(false);
 
     private static void init() {
         AutoClickSettingsUI.setAllEnabled(false);
@@ -39,6 +40,7 @@ public class AutoClickHandler {
         clicked.set(false);
         macroExecutor = Executors.newSingleThreadScheduledExecutor();
     }
+
     public static void start() {
         init();
         isStart = true;
@@ -49,6 +51,7 @@ public class AutoClickHandler {
             delay /= 2L;
             legacy = false;
         }
+
         TimeUnit timeUnit = getTimeUnit();
         Runnable runnable = getRunnable(legacy);
 
@@ -73,25 +76,28 @@ public class AutoClickHandler {
         boolean middle = mouseButton.equals(Locale.getMouseMiddle());
         boolean right = mouseButton.equals(Locale.getMouseRight());
 
-        int button;
-
         if (left) {
-            button = InputEvent.BUTTON1_DOWN_MASK;
+            macroButton = InputEvent.BUTTON1_DOWN_MASK;
         } else if (middle) {
-            button = InputEvent.BUTTON2_DOWN_MASK;
+            macroButton = InputEvent.BUTTON2_DOWN_MASK;
         } else if (right) {
-            button = InputEvent.BUTTON3_DOWN_MASK;
+            macroButton = InputEvent.BUTTON3_DOWN_MASK;
         } else {
-            button = 0;
+            macroButton = 0;
         }
 
-        if (button != 0) {
+        if (macroButton != 0) {
             if (legacy) {
-                return () -> startLegacyMacro(button);
+                return () -> startLegacyMacro(macroButton);
             }
-            return () -> startMacro(button);
+            return () -> startMacro(macroButton);
         }
         return null;
+    }
+
+    public static void stop() {
+        macroExecutor.shutdown();
+        r.mouseRelease(macroButton);
     }
 
     //자동 클릭 매크로 실행(메서드 반복)

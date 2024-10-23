@@ -116,7 +116,7 @@ public class Design extends JFrame {
                         "<br>" +
                         "Developer: Najoan" +
                         "<br>" +
-                        "후원: <a href=\"https://toss.me/najoan\">토스(toss)로 후원하기</a>" +
+                        "<a href=\"https://github.com/sponsors/najoan125\">Github Sponsors</a>" +
                         "<br>" +
                         "<br>" +
                         "<h2>Open Source License</h2>" +
