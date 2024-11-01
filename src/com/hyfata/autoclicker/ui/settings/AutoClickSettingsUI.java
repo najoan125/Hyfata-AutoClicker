@@ -284,15 +284,15 @@ public class AutoClickSettingsUI extends JFrame {
             @Override
             public Object stringToValue(String text) throws ParseException {
                 if (text != null && text.isEmpty()) {
-                    return 0L;
+                    return 0;
                 }
                 return super.stringToValue(text);
             }
         };
 
-        formatter.setValueClass(Long.class);
-        formatter.setMinimum(0L);
-        formatter.setMaximum(Long.MAX_VALUE);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0);
+        formatter.setMaximum(Integer.MAX_VALUE);
         formatter.setAllowsInvalid(false);
         formatter.setCommitsOnValidEdit(true);
         return formatter;

@@ -46,14 +46,10 @@ public class AutoClickHandler {
         isStart = true;
 
         long delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
-        boolean legacy = true;
-        if (delay > 1) {
-            delay /= 2L;
-            legacy = false;
-        }
+        delay *= 500;
 
         TimeUnit timeUnit = getTimeUnit();
-        Runnable runnable = getRunnable(legacy);
+        Runnable runnable = getRunnable();
 
         if (runnable != null) {
             macroExecutor.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
@@ -65,12 +61,12 @@ public class AutoClickHandler {
     private static TimeUnit getTimeUnit() {
         String delayUnit = Objects.requireNonNull(AutoClickSettingsUI.delayUnits.getSelectedItem()).toString();
         if (Objects.equals(delayUnit, Locale.getDelayMs())) {
-            return TimeUnit.MILLISECONDS;
+            return TimeUnit.MICROSECONDS;
         }
-        return TimeUnit.MICROSECONDS;
+        return TimeUnit.NANOSECONDS;
     }
 
-    private static Runnable getRunnable(boolean legacy) {
+    private static Runnable getRunnable() {
         String mouseButton = Objects.requireNonNull(AutoClickSettingsUI.mouseButtons.getSelectedItem()).toString();
         boolean left = mouseButton.equals(Locale.getMouseLeft());
         boolean middle = mouseButton.equals(Locale.getMouseMiddle());
@@ -87,9 +83,6 @@ public class AutoClickHandler {
         }
 
         if (macroButton != 0) {
-            if (legacy) {
-                return () -> startLegacyMacro(macroButton);
-            }
             return () -> startMacro(macroButton);
         }
         return null;
@@ -110,11 +103,5 @@ public class AutoClickHandler {
             r.mouseRelease(button);
             clicked.set(false);
         }
-    }
-
-    private static void startLegacyMacro(int button) {
-        r.mousePress(button);
-        r.mouseRelease(button);
-        int current = clicks.incrementAndGet();
     }
 }
