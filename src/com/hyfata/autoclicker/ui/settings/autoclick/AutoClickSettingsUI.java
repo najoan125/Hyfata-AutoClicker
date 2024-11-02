@@ -49,7 +49,7 @@ public class AutoClickSettingsUI extends JFrame {
         mouseButton(settings.getMouseButton());
         holdToggle(settings.getHoldToggle());
 
-        key.setKeyCode(settings.getKeycode());
+        key.initKeyCode(settings.getKeycode());
         key();
 
         changeKey();
@@ -61,7 +61,7 @@ public class AutoClickSettingsUI extends JFrame {
         mouseButtons.setSelectedItem(settings.getMouseButton());
         holdToggles.setSelectedItem(settings.getHoldToggle());
 
-        key.setKeyCode(settings.getKeycode());
+        key.initKeyCode(settings.getKeycode());
     }
 
     private void calculateClicks() {

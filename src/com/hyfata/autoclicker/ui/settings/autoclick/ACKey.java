@@ -24,7 +24,8 @@ public class ACKey {
         return instance;
     }
 
-    protected void setKeyCode(Integer keyCode) {
+    // must be preset already loaded
+    protected void initKeyCode(Integer keyCode) {
         boolean keyboard = UserSettings.isKeyboard();
 
         GlobalKeyListener.keycode = keyCode;
