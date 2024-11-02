@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="JsonUtility-1.1.0">
+  <library name="FileUtils-1.1.0-all">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/JsonUtility-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/FileUtils-1.1.0-all.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -2,8 +2,9 @@ package com.hyfata.autoclicker.utils.settings;
 
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.json.JsonReader;
+import com.hyfata.json.JsonUtil;
 import com.hyfata.json.JsonWriter;
 import com.hyfata.json.exceptions.JsonEmptyException;
 import org.json.JSONObject;
@@ -192,10 +193,11 @@ public class SettingsUtil {
     }
 
     public static void renamePreset(String preset, String name) {
-        loadPreset(preset);
-        removePreset(preset);
-        savePreset(name);
-        presetNames.add(name);
+        JSONObject renamed = JsonUtil.renameKey(settings.getJSONObject("presets"), preset, name);
+
+        settings.getJSONObject("presets").clear();
+        settings.put("presets", renamed);
+        loadAllPresetNames();
     }
 
     public static void removePreset(String preset) {

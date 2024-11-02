@@ -2,7 +2,7 @@ package com.hyfata.autoclicker.ui;
 
 import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 import com.hyfata.autoclicker.utils.DialogUtil;

@@ -1,47 +1,35 @@
 package com.hyfata.autoclicker.ui.settings.preset;
 
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.Design;
 import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.JPanelUtil;
+import com.hyfata.autoclicker.utils.PresetUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PresetUI {
-    protected static JList<String> presetList;
-    protected static JScrollPane presetScrollPane;
-    protected static DefaultListModel<String> presetListModel;
-    protected static JButton OK, plus, delete, rename;
-    protected static JLabel currentPresetLabel;
+    private static PresetUI instance;
 
-    protected static final int presetListWidMin = 140;
-    protected static final int presetListWidMax = 400;
-    protected static final int presetScrollPaneHeight = 90;
+    private final JPanelUtil panelUtil = new JPanelUtil();
+    private JButton OK, plus, delete, rename;
+    private JLabel currentPresetLabel;
 
-    private final ArrayList<JPanel> panels = new ArrayList<>();
-    private final HashMap<Integer, Integer> addedHeights = new HashMap<>(); //index, height
+    public PresetUI() {
+        instance = this;
+    }
+
+    public static PresetUI getInstance() {
+        if (instance == null) {
+            instance = new PresetUI();
+        }
+        return instance;
+    }
 
     public JPanel getPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         initPanels();
-
-        int height = 35;
-
-        int i = 0;
-        for (JPanel p : panels) {
-            p.setLayout(new FlowLayout(FlowLayout.CENTER));
-            p.setPreferredSize(new Dimension(Design.WIDTH, height));
-            if (addedHeights.containsKey(i)) {
-                p.setPreferredSize(new Dimension(Design.WIDTH, height + addedHeights.get(i)));
-            }
-            panel.add(p);
-
-            i++;
-        }
-        return panel;
+        return panelUtil.createPanel(FlowLayout.CENTER);
     }
 
     private void initPanels() {
@@ -55,25 +43,15 @@ public class PresetUI {
         JPanel panel = new JPanel();
         currentPresetLabel = new JLabel(Locale.getCurrentPreset() + SettingsUtil.getCurrentPreset());
         panel.add(currentPresetLabel);
-        panels.add(panel);
+        panelUtil.register(panel);
     }
 
     private void presets() {
-        presetListModel = new DefaultListModel<>();
-        presetList = new JList<>(presetListModel);
-        presetList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        for (String s : SettingsUtil.getPresetNames()) {
-            presetListModel.addElement(s);
-        }
-
-        presetScrollPane = new JScrollPane(presetList);
-        presetScrollPane.getViewport().setPreferredSize(new Dimension(PresetUtils.getPresetListWidth(), presetScrollPaneHeight));
-
-        JPanel scrollPanel = Design.getScrollablePanel(presetScrollPane);
-        panels.add(scrollPanel);
-        addHeight(80);
+        PresetList presetList = new PresetList();
+        JPanel panel = presetList.createPanel();
+        panelUtil.register(panel);
+        panelUtil.addHeight(80);
     }
-
 
     private void editPreset() {
         JPanel panel = new JPanel();
@@ -84,7 +62,7 @@ public class PresetUI {
         panel.add(plus);
         panel.add(delete);
         panel.add(rename);
-        panels.add(panel);
+        panelUtil.register(panel);
     }
 
     private void okButton() {
@@ -92,18 +70,26 @@ public class PresetUI {
         OK = new JButton("OK");
 
         OK.addActionListener(e -> {
-            String preset = presetList.getSelectedValue();
+            String preset = PresetList.getInstance().getSelectedPreset();
             if (preset != null) {
-                PresetUtils.loadPreset(preset);
+                PresetUtil.saveAndLoad(preset);
             } else {
                 DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             }
         });
         panel.add(OK);
-        panels.add(panel);
+        panelUtil.register(panel);
     }
 
-    private void addHeight(int height) {
-        addedHeights.put(panels.size() - 1, height);
+    public void setAllEnabled(boolean bool) {
+        PresetList.getInstance().setEnabled(bool);
+        OK.setEnabled(bool);
+        plus.setEnabled(bool);
+        delete.setEnabled(bool);
+        rename.setEnabled(bool);
+    }
+
+    public void setCurrentPresetText(String text) {
+        currentPresetLabel.setText(text);
     }
 }

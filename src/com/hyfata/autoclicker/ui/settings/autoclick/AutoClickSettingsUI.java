@@ -1,4 +1,4 @@
-package com.hyfata.autoclicker.ui.settings;
+package com.hyfata.autoclicker.ui.settings.autoclick;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.hyfata.autoclicker.AutoClickHandler;

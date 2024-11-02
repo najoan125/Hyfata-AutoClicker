@@ -1,9 +1,9 @@
 package com.hyfata.autoclicker;
 
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.AutoClickSettingsUI;
+import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
-import com.hyfata.autoclicker.ui.settings.preset.PresetUtils;
+import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 import com.hyfata.autoclicker.utils.DialogUtil;
 
 import java.awt.*;
@@ -35,8 +35,8 @@ public class AutoClickHandler {
 
     private static void init() {
         AutoClickSettingsUI.setAllEnabled(false);
-        LanguageUI.setAllEnabled(false);
-        PresetUtils.setAllEnabled(false);
+        LanguageUI.getInstance().setAllEnabled(false);
+        PresetUI.getInstance().setAllEnabled(false);
         clicked.set(false);
         macroExecutor = Executors.newSingleThreadScheduledExecutor();
     }
