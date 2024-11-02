@@ -38,7 +38,7 @@ public class ACKey {
         }
     }
 
-    private void setKeyText(Integer keycode, boolean keyboard) {
+    public void setKeyText(Integer keycode, boolean keyboard) {
         if (keyboard) {
             String keyChar = NativeKeyEvent.getKeyText(keycode);
             if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))) {
@@ -50,21 +50,6 @@ public class ACKey {
         else {
             keyLabel.setText(" (" + Locale.getMouseButtonCode()+": " + keycode + ")");
         }
-    }
-
-    public void changeKeyCode(int keycode, String key, String label, boolean keyboard) {
-        GlobalKeyListener.isChanging = false;
-        GlobalKeyListener.keycode = keycode;
-        GlobalKeyListener.isKeyboard = keyboard;
-        keyLabel.setText(key + " (" + label+": " + keycode + ")");
-        changeKeyButton.setEnabled(true);
-        changingKeyDialog.setVisible(false);
-    }
-
-    public void cancelChangeKeyCode() {
-        GlobalKeyListener.isChanging = false;
-        changeKeyButton.setEnabled(true);
-        changingKeyDialog.setVisible(false);
     }
 
     protected JButton getResetButton() {
@@ -104,5 +89,10 @@ public class ACKey {
     protected void setAllEnabled(boolean bool) {
         changeKeyButton.setEnabled(bool);
         resetButton.setEnabled(bool);
+    }
+
+    public void onKeyChanged() {
+        changeKeyButton.setEnabled(true);
+        changingKeyDialog.setVisible(false);
     }
 }

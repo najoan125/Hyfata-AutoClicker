@@ -11,8 +11,6 @@ import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 
-import java.awt.*;
-
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
     private boolean isPressed = false;
 
@@ -44,14 +42,9 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
 
         if (isChanging) {
             if (key == NativeKeyEvent.VC_ESCAPE) {
-                ACKey.getInstance().cancelChangeKeyCode();
+                cancelChangeKeyCode();
             } else {
-                String keyChar = NativeKeyEvent.getKeyText(key);
-                if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))) {
-                    ACKey.getInstance().changeKeyCode(key, "", Locale.getKeyCode(), true);
-                } else {
-                    ACKey.getInstance().changeKeyCode(key, keyChar, Locale.getKeyCode(), true);
-                }
+                changeKeyCode(key, true);
             }
         }
     }
@@ -81,9 +74,9 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
 
         if (isChanging) {
             if (key == 1) {
-                ACKey.getInstance().cancelChangeKeyCode();
+                cancelChangeKeyCode();
             } else {
-                ACKey.getInstance().changeKeyCode(key, "", Locale.getMouseButtonCode(), false);
+                changeKeyCode(key, false);
             }
         }
     }
@@ -99,5 +92,18 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         } else if (!ACDelay.getInstance().getDelay().equals("0")) {
             AutoClickHandler.start();
         }
+    }
+
+    public void changeKeyCode(int keycode, boolean keyboard) {
+        GlobalKeyListener.isChanging = false;
+        GlobalKeyListener.keycode = keycode;
+        GlobalKeyListener.isKeyboard = keyboard;
+        ACKey.getInstance().setKeyText(keycode, keyboard);
+        ACKey.getInstance().onKeyChanged();
+    }
+
+    public void cancelChangeKeyCode() {
+        GlobalKeyListener.isChanging = false;
+        ACKey.getInstance().onKeyChanged();
     }
 }
