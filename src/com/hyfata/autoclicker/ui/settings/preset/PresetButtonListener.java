@@ -2,7 +2,7 @@ package com.hyfata.autoclicker.ui.settings.preset;
 
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.PresetUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
@@ -18,7 +18,7 @@ public class PresetButtonListener {
 
         input = input.trim();
         if (input.isEmpty()) { // re-input
-            DialogUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
+            SwingUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
             plusListener();
         } else if (SettingsUtil.getPresetNames().contains(input)) { // overwrite because it is already exists
             int answer = JOptionPane.showConfirmDialog(null, Locale.getInputPresetOverwrite().replace("%s", input),
@@ -39,11 +39,11 @@ public class PresetButtonListener {
     protected static void deleteListener() {
         String selectedPreset = PresetList.getInstance().getSelectedPreset();
         if (selectedPreset == null) {
-            DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
+            SwingUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             return;
         }
         if (selectedPreset.equals("default")) {
-            DialogUtil.showErrorDialog(Locale.getCantRemoveDefault(), "Error removing preset");
+            SwingUtil.showErrorDialog(Locale.getCantRemoveDefault(), "Error removing preset");
             return;
         }
 
@@ -62,11 +62,11 @@ public class PresetButtonListener {
     protected static void renameListener() {
         String selectedPreset = PresetList.getInstance().getSelectedPreset();
         if (selectedPreset == null) {
-            DialogUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
+            SwingUtil.showErrorDialog(Locale.getPresetNotSelected(), "Preset not selected error");
             return;
         }
         if (selectedPreset.equals("default")) {
-            DialogUtil.showErrorDialog(Locale.getCantRenameDefault(), "Error renaming preset");
+            SwingUtil.showErrorDialog(Locale.getCantRenameDefault(), "Error renaming preset");
             return;
         }
 
@@ -80,10 +80,10 @@ public class PresetButtonListener {
         renamedPreset = renamedPreset.trim();
 
         if (renamedPreset.isEmpty()) {
-            DialogUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
+            SwingUtil.showErrorDialog(Locale.getInputPresetEmpty(), "Preset name error");
             renameListener();
         } else if (SettingsUtil.getPresetNames().contains(renamedPreset)) {
-            DialogUtil.showErrorDialog(Locale.getPresetAlreadyExists().replace("%s", renamedPreset), "Preset already exists");
+            SwingUtil.showErrorDialog(Locale.getPresetAlreadyExists().replace("%s", renamedPreset), "Preset already exists");
         } else {
             if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
                 SettingsUtil.renamePreset(selectedPreset, renamedPreset);

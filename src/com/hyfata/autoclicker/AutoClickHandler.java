@@ -1,10 +1,11 @@
 package com.hyfata.autoclicker;
 
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
-import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.SwingUtil;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
@@ -34,7 +35,7 @@ public class AutoClickHandler {
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
 
     private static void init() {
-        AutoClickSettingsUI.setAllEnabled(false);
+        AutoClickSettingsUI.getInstance().setAllEnabled(false);
         LanguageUI.getInstance().setAllEnabled(false);
         PresetUI.getInstance().setAllEnabled(false);
         clicked.set(false);
@@ -45,7 +46,7 @@ public class AutoClickHandler {
         init();
         isStart = true;
 
-        long delay = Long.parseLong(AutoClickSettingsUI.delay.getValue().toString());
+        long delay = Long.parseLong(ACDelay.getInstance().getDelay());
         delay *= 500;
 
         TimeUnit timeUnit = getTimeUnit();
@@ -54,12 +55,12 @@ public class AutoClickHandler {
         if (runnable != null) {
             macroExecutor.scheduleAtFixedRate(runnable, 0, delay, timeUnit);
         } else {
-            DialogUtil.showErrorDialog("Error in Mouse button", "Runnable Error");
+            SwingUtil.showErrorDialog("Error in Mouse button", "Runnable Error");
         }
     } // start()
 
     private static TimeUnit getTimeUnit() {
-        String delayUnit = Objects.requireNonNull(AutoClickSettingsUI.delayUnits.getSelectedItem()).toString();
+        String delayUnit = ACDelay.getInstance().getSelectedUnit();
         if (Objects.equals(delayUnit, Locale.getDelayMs())) {
             return TimeUnit.MICROSECONDS;
         }
@@ -67,7 +68,7 @@ public class AutoClickHandler {
     }
 
     private static Runnable getRunnable() {
-        String mouseButton = Objects.requireNonNull(AutoClickSettingsUI.mouseButtons.getSelectedItem()).toString();
+        String mouseButton = AutoClickSettingsUI.getInstance().getSelectedMouseButton();
         boolean left = mouseButton.equals(Locale.getMouseLeft());
         boolean middle = mouseButton.equals(Locale.getMouseMiddle());
         boolean right = mouseButton.equals(Locale.getMouseRight());

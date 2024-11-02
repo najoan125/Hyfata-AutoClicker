@@ -16,6 +16,6 @@ public class PresetUtil {
         SettingsUtil.setCurrentPreset(preset);
         PresetUI.getInstance().setCurrentPresetText(Locale.getCurrentPreset() + SettingsUtil.getCurrentPreset());
         SettingsUtil.loadPreset(preset);
-        AutoClickSettingsUI.reload();
+        AutoClickSettingsUI.getInstance().reload();
     }
 }

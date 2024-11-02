@@ -2,6 +2,7 @@ package com.hyfata.autoclicker.utils.settings;
 
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.json.JsonReader;
 import com.hyfata.json.JsonUtil;
@@ -12,7 +13,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class SettingsUtil {
     private static ArrayList<String> presetNames;
@@ -129,22 +129,22 @@ public class SettingsUtil {
 
     // able to change
     public static void loadCurrentSettings() {
-        UserSettings.setDelay(AutoClickSettingsUI.delay.getValue().toString());
-        if (Objects.equals(AutoClickSettingsUI.delayUnits.getSelectedItem(), Locale.getDelayMs())) {
-            UserSettings.setDelayUnit("ms");
-        } else {
-            UserSettings.setDelayUnit("micros");
-        }
+        UserSettings.setDelay(ACDelay.getInstance().getDelay());
 
-        if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseLeft())) {
+        if (ACDelay.getInstance().getSelectedUnit().equals(Locale.getDelayMs()))
+            UserSettings.setDelayUnit("ms");
+        else
+            UserSettings.setDelayUnit("micros");
+
+        if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseLeft())) {
             UserSettings.setMouseButton("left");
-        } else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseMiddle())) {
+        } else if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseMiddle())) {
             UserSettings.setMouseButton("middle");
-        } else if (Objects.equals(AutoClickSettingsUI.mouseButtons.getSelectedItem(), Locale.getMouseRight())) {
+        } else if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseRight())) {
             UserSettings.setMouseButton("right");
         }
 
-        UserSettings.setToggle(Objects.equals(AutoClickSettingsUI.holdToggles.getSelectedItem(), Locale.getKeyToggle()));
+        UserSettings.setToggle(AutoClickSettingsUI.getInstance().getHoldToggle().equals(Locale.getKeyToggle()));
 
         if (GlobalKeyListener.keycode == null) {
             UserSettings.setKeycode(-1);

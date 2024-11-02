@@ -5,7 +5,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.Design;
-import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
 
@@ -26,14 +26,14 @@ public class AutoClicker extends JPanel {
         try {
             SettingsUtil.init();
         } catch (IOException e) {
-            DialogUtil.showErrorDialog(e, "Error loading Settings file. Contact to developer on discord!", "Error loading settings file");
+            SwingUtil.showErrorDialog(e, "Error loading Settings file. Contact to developer on discord!", "Error loading settings file");
             System.exit(-1);
         }
 
         try {
             Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException e) {
-            DialogUtil.showErrorDialog(e,"Error loading language file. Contact to developer on discord!", "Error loading language file");
+            SwingUtil.showErrorDialog(e,"Error loading language file. Contact to developer on discord!", "Error loading language file");
             System.exit(-1);
         }
 
@@ -54,7 +54,7 @@ public class AutoClicker extends JPanel {
         try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
-            DialogUtil.showErrorDialog(ex, Locale.getNativeHookError(), "Error registering NativeHook");
+            SwingUtil.showErrorDialog(ex, Locale.getNativeHookError(), "Error registering NativeHook");
             System.exit(1);
         }
         GlobalScreen.addNativeKeyListener(new GlobalKeyListener());

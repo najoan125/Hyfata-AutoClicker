@@ -3,8 +3,7 @@ package com.hyfata.autoclicker.ui.settings;
 import com.hyfata.autoclicker.AutoClicker;
 import com.hyfata.autoclicker.locale.Languages;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.Design;
-import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.JPanelUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
@@ -55,7 +54,7 @@ public class LanguageUI {
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.getViewport().setPreferredSize(new Dimension(140, 90));
 
-        JPanel scrollPanel = Design.getScrollablePanel(scrollPane);
+        JPanel scrollPanel = SwingUtil.getScrollablePanel(scrollPane);
         panelUtil.register(scrollPanel);
     }
 
@@ -90,7 +89,7 @@ public class LanguageUI {
         try {
             Locale.setLocale(SettingsUtil.getLang());
         } catch (IOException | JsonEmptyException ex) {
-            DialogUtil.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: " + AutoClicker.DISCORD_TAG + "\n\n" + ex.getMessage(), "Error loading language file");
+            SwingUtil.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: " + AutoClicker.DISCORD_TAG + "\n\n" + ex.getMessage(), "Error loading language file");
             System.exit(-1);
         }
         AutoClicker.reload();

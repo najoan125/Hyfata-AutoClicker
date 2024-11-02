@@ -5,7 +5,7 @@ import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
-import com.hyfata.autoclicker.utils.DialogUtil;
+import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.UpdateUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
@@ -42,7 +42,7 @@ public class Design extends JFrame {
                     SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
                     SettingsUtil.saveFile();
                 } catch (IOException ex) {
-                    DialogUtil.showErrorDialog(ex, Locale.getSavingSettingsError(), "Error saving settings");
+                    SwingUtil.showErrorDialog(ex, Locale.getSavingSettingsError(), "Error saving settings");
                 }
                 System.exit(0);
             }
@@ -59,14 +59,6 @@ public class Design extends JFrame {
             updateUtil.showUpdateDialog();
         } catch (JsonEmptyException | IOException | URISyntaxException ignored) {
         }
-    }
-
-    public static JPanel getScrollablePanel(Component view) {
-        JScrollPane scrollPane = new JScrollPane(view);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        JPanel scrollablePanel = new JPanel(new BorderLayout());
-        scrollablePanel.add(scrollPane, BorderLayout.CENTER);
-        return scrollablePanel;
     }
 
     private void design() {
@@ -143,6 +135,6 @@ public class Design extends JFrame {
         });
 
         panel.add(editorPane);
-        return getScrollablePanel(panel);
+        return SwingUtil.getScrollablePanel(panel);
     }
 }

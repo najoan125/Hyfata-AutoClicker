@@ -5,15 +5,17 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
+import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
+import com.hyfata.autoclicker.ui.settings.autoclick.ACKey;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 
 import java.awt.*;
-import java.util.Objects;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
-    static boolean isPressed = false;
+    private boolean isPressed = false;
+
     public static boolean isKeyboard = true;
     public static boolean isChanging = false;
     public static boolean shouldBlocked = false;
@@ -21,16 +23,17 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
 
     //keyboard
     @Override
-    public void nativeKeyPressed(NativeKeyEvent e){
+    public void nativeKeyPressed(NativeKeyEvent e) {
         int key = e.getKeyCode();
         if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
-            if (holdToggle.equals(Locale.getKeyHold())){
+            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggle();
+            if (holdToggle.equals(Locale.getKeyHold())) {
                 toggleAutoClick();
                 isPressed = true;
             }
         }
     }
+
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
         int key = e.getKeyCode();
@@ -41,15 +44,13 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
 
         if (isChanging) {
             if (key == NativeKeyEvent.VC_ESCAPE) {
-                cancelChangeKeyCode();
-            }
-            else {
+                ACKey.getInstance().cancelChangeKeyCode();
+            } else {
                 String keyChar = NativeKeyEvent.getKeyText(key);
-                if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))){
-                    changeKeyCode(key, "", Locale.getKeyCode(), true);
-                }
-                else {
-                    changeKeyCode(key, keyChar, Locale.getKeyCode(), true);
+                if (keyChar.startsWith(Toolkit.getProperty("AWT.unknown", "Unknown"))) {
+                    ACKey.getInstance().changeKeyCode(key, "", Locale.getKeyCode(), true);
+                } else {
+                    ACKey.getInstance().changeKeyCode(key, keyChar, Locale.getKeyCode(), true);
                 }
             }
         }
@@ -61,8 +62,8 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public void nativeMousePressed(NativeMouseEvent e) {
         int key = e.getButton();
         if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = Objects.requireNonNull(AutoClickSettingsUI.holdToggles.getSelectedItem()).toString();
-            if (holdToggle.equals(Locale.getKeyHold())){
+            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggle();
+            if (holdToggle.equals(Locale.getKeyHold())) {
                 toggleAutoClick();
                 isPressed = true;
             }
@@ -80,38 +81,23 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
 
         if (isChanging) {
             if (key == 1) {
-                cancelChangeKeyCode();
-            }
-            else {
-                changeKeyCode(key, "",Locale.getMouseButtonCode(), false);
+                ACKey.getInstance().cancelChangeKeyCode();
+            } else {
+                ACKey.getInstance().changeKeyCode(key, "", Locale.getMouseButtonCode(), false);
             }
         }
     }
+
     //mouse
-    private static void toggleAutoClick() {
+    private void toggleAutoClick() {
         if (AutoClickHandler.isStart) {
             AutoClickHandler.isStart = false;
-            AutoClickSettingsUI.setAllEnabled(true);
+            AutoClickSettingsUI.getInstance().setAllEnabled(true);
             LanguageUI.getInstance().setAllEnabled(true);
             PresetUI.getInstance().setAllEnabled(true);
             AutoClickHandler.stop();
-        } else if (!AutoClickSettingsUI.delay.getText().equals("0")) {
+        } else if (!ACDelay.getInstance().getDelay().equals("0")) {
             AutoClickHandler.start();
         }
-    }
-
-    private static void changeKeyCode(int keycode, String key, String label, boolean keyboard) {
-        isChanging = false;
-        GlobalKeyListener.keycode = keycode;
-        GlobalKeyListener.isKeyboard = keyboard;
-        AutoClickSettingsUI.key.setText(key + " (" + label+": " + keycode + ")");
-        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
-        AutoClickSettingsUI.changingKeyDialog.setVisible(false);
-    }
-
-    private static void cancelChangeKeyCode(){
-        isChanging = false;
-        AutoClickSettingsUI.changeKeyButton.setEnabled(true);
-        AutoClickSettingsUI.changingKeyDialog.setVisible(false);
     }
 }

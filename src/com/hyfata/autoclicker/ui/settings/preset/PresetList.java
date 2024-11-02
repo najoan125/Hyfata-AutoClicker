@@ -1,6 +1,6 @@
 package com.hyfata.autoclicker.ui.settings.preset;
 
-import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 
 import javax.swing.*;
@@ -39,7 +39,7 @@ public class PresetList {
         presetScrollPane = new JScrollPane(presetList);
         presetScrollPane.getViewport().setPreferredSize(new Dimension(getWidth(), height));
 
-        return Design.getScrollablePanel(presetScrollPane);
+        return SwingUtil.getScrollablePanel(presetScrollPane);
     }
 
     public int getWidth() {
