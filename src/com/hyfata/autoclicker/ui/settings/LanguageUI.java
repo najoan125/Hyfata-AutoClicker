@@ -52,7 +52,7 @@ public class LanguageUI {
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(list);
-        scrollPane.getViewport().setPreferredSize(new Dimension(140, 90));
+        scrollPane.getViewport().setPreferredSize(new Dimension(140, 120));
 
         JPanel scrollPanel = SwingUtil.getScrollablePanel(scrollPane);
         panelUtil.register(scrollPanel);
@@ -64,7 +64,7 @@ public class LanguageUI {
         OK.addActionListener(e -> okButtonAction());
 
         panel.add(OK);
-        panelUtil.addHeight(80);
+        panelUtil.addHeight(110);
         panelUtil.register(panel);
     }
 

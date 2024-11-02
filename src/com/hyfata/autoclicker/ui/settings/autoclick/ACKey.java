@@ -13,7 +13,7 @@ public class ACKey {
     private static ACKey instance;
 
     private JButton changeKeyButton, resetButton;
-    private JLabel keyLabel = null;
+    private final JLabel keyLabel = new JLabel();
     private JDialog changingKeyDialog;
 
     public ACKey() {
@@ -30,7 +30,6 @@ public class ACKey {
         GlobalKeyListener.keycode = keyCode;
         GlobalKeyListener.isKeyboard = keyboard;
 
-        keyLabel = new JLabel();
         if (keyCode == null) {
             keyLabel.setText(Locale.getNotSet());
         }

@@ -15,7 +15,7 @@ public class PresetList {
 
     private final int minWidth = 140;
     private final int maxWidth = 400;
-    private final int height = 90;
+    private final int height = 120;
 
     public PresetList() {
         instance = this;

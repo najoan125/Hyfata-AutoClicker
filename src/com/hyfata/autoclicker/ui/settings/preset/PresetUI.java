@@ -50,7 +50,7 @@ public class PresetUI {
         PresetList presetList = new PresetList();
         JPanel panel = presetList.createPanel();
         panelUtil.register(panel);
-        panelUtil.addHeight(80);
+        panelUtil.addHeight(110);
     }
 
     private void editPreset() {

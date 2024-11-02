@@ -72,6 +72,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void clicks() {
         JPanel panel = new JPanel();
+        panel.add(Box.createHorizontalStrut(10));
         clicks.setForeground(Color.LIGHT_GRAY);
 
         panel.add(new JLabel(Locale.getTotalClicks()));
@@ -82,6 +83,7 @@ public class AutoClickSettingsUI extends JFrame {
     private void delay(int defaultDelay, String unit) {
         JPanel panel = new JPanel();
 
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(new JLabel(Locale.getAutoClickDelay()));
         panel.add(delayUI.getTextField(defaultDelay));
         panel.add(delayUI.getUnitMenu(unit));
@@ -90,6 +92,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void mouseButton(String button) {
         JPanel panel = new JPanel();
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(new JLabel(Locale.getMouseButton()));
 
         String[] menu = {Locale.getMouseLeft(), Locale.getMouseMiddle(), Locale.getMouseRight()};
@@ -100,6 +103,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void holdToggle(String data) {
         JPanel panel = new JPanel();
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(new JLabel(Locale.getKeyHold() + " / " + Locale.getKeyToggle() + ": "));
 
         String[] menu = {Locale.getKeyHold(), Locale.getKeyToggle()};
@@ -110,6 +114,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void key() {
         JPanel panel = new JPanel();
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(new JLabel(Locale.getKey()));
         panel.add(key.getKeyLabel());
         panel.add(key.getResetButton());
@@ -120,6 +125,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     private void changeKey() {
         JPanel panel = new JPanel();
+        panel.add(Box.createHorizontalStrut(10));
         panel.add(key.getChangeKeyButton());
         panelUtil.register(panel);
     }

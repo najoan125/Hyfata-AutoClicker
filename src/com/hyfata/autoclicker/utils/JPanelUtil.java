@@ -12,7 +12,7 @@ public class JPanelUtil {
     private final HashMap<Integer,Integer> addedHeights = new HashMap<>(); //index, height
 
     public JPanel createPanel(int flowLayout) {
-        return createPanel(flowLayout, 35);
+        return createPanel(flowLayout, 30);
     }
 
     public JPanel createPanel(int flowLayout, int height) {

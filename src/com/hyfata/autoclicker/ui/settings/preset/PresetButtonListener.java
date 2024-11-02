@@ -54,9 +54,9 @@ public class PresetButtonListener {
         if (selectedPreset.equals(SettingsUtil.getCurrentPreset())) {
             PresetUtil.saveAndLoad("default");
         }
+        SettingsUtil.removePreset(selectedPreset);
         PresetList.getInstance().removePreset(selectedPreset);
         PresetList.getInstance().refresh();
-        SettingsUtil.removePreset(selectedPreset);
     }
 
     protected static void renameListener() {
