@@ -33,8 +33,10 @@ public class AutoClickHandler {
 
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
     public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
+    public static AtomicInteger limitClicks = new AtomicInteger(0); // limited clicks
 
     private static void init() {
+        limitClicks.set(0);
         AutoClickSettingsUI.getInstance().setAllEnabled(false);
         LanguageUI.getInstance().setAllEnabled(false);
         PresetUI.getInstance().setAllEnabled(false);
@@ -99,10 +101,12 @@ public class AutoClickHandler {
         if (!clicked.get()) {
             r.mousePress(button);
             clicked.set(true);
-            int current = clicks.incrementAndGet();
+            clicks.incrementAndGet();
+            limitClicks.incrementAndGet();
         } else {
             r.mouseRelease(button);
             clicked.set(false);
+            // TODO: if current click is reached limited click, run stop()
         }
     }
 }

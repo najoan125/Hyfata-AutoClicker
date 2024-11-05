@@ -100,6 +100,7 @@ public class SettingsUtil {
         UserSettings.setToggle(false);
         UserSettings.setKeycode(-1);
         UserSettings.setKeyboard(false);
+        UserSettings.setLimitClick(0);
     }
 
     // able to change
@@ -111,6 +112,7 @@ public class SettingsUtil {
         UserSettings.setToggle(jsonObject.optBoolean("toggle", false));
         UserSettings.setKeycode(jsonObject.optInt("keycode", -1));
         UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
+        UserSettings.setLimitClick(jsonObject.optInt("limitClick", 0));
     }
 
 
@@ -124,6 +126,7 @@ public class SettingsUtil {
         jsonObject.put("toggle", UserSettings.isToggle());
         jsonObject.put("keycode", UserSettings.getKeycode());
         jsonObject.put("keyboard", UserSettings.isKeyboard());
+        jsonObject.put("limitClick", UserSettings.getLimitClick());
         settings.getJSONObject("presets").put(preset, jsonObject);
     }
 
@@ -145,6 +148,8 @@ public class SettingsUtil {
         }
 
         UserSettings.setToggle(AutoClickSettingsUI.getInstance().getHoldToggle().equals(Locale.getKeyToggle()));
+
+        // TODO: limited clicks
 
         if (GlobalKeyListener.keycode == null) {
             UserSettings.setKeycode(-1);

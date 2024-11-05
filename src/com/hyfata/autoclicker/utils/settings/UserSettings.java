@@ -7,6 +7,7 @@ public class UserSettings {
     private static boolean toggle;
     private static int keycode;
     private static boolean keyboard;
+    private static int limitClick;
 
     public static boolean isKeyboard() {
         return keyboard;
@@ -54,5 +55,13 @@ public class UserSettings {
 
     public static void setKeycode(int keycode) {
         UserSettings.keycode = keycode;
+    }
+
+    public static int getLimitClick() {
+        return limitClick;
+    }
+
+    public static void setLimitClick(int limitClick) {
+        UserSettings.limitClick = limitClick;
     }
 }
