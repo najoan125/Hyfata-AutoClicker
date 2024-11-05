@@ -10,7 +10,6 @@ import com.hyfata.json.exceptions.JsonEmptyException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class LanguageUI {
     private static LanguageUI instance;
@@ -88,7 +87,7 @@ public class LanguageUI {
         SettingsUtil.savePreset(SettingsUtil.getCurrentPreset());
         try {
             Locale.setLocale(SettingsUtil.getLang());
-        } catch (IOException | JsonEmptyException ex) {
+        } catch (JsonEmptyException ex) {
             SwingUtil.showErrorDialog("Error loading language file. Contact to developer on discord!\nDiscord Tag: " + AutoClicker.DISCORD_TAG + "\n\n" + ex.getMessage(), "Error loading language file");
             System.exit(-1);
         }

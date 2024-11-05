@@ -32,8 +32,8 @@ public class AutoClickHandler {
     private static int macroButton;
 
     public static boolean isStart = false; //자동 클릭 매크로 작동 여부
-    public static AtomicInteger clicks = new AtomicInteger(0); //클릭 수
-    public static AtomicInteger limitClicks = new AtomicInteger(0); // limited clicks
+    public static final AtomicInteger clicks = new AtomicInteger(0); //클릭 수
+    public static final AtomicInteger limitClicks = new AtomicInteger(0); // limited clicks
 
     private static void init() {
         limitClicks.set(0);

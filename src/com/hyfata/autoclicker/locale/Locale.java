@@ -4,7 +4,6 @@ import com.hyfata.json.JsonReader;
 import com.hyfata.json.exceptions.JsonEmptyException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class Locale {
@@ -53,7 +52,7 @@ public class Locale {
     private static String SavingSettingsError;
     private static String totalClicks;
 
-    public static void setLocale(String loc) throws IOException, JsonEmptyException {
+    public static void setLocale(String loc) throws JsonEmptyException {
         JSONObject locale = JsonReader.readFromInputStream(Objects.requireNonNull(Locale.class.getResourceAsStream(loc)));
         updateFound = locale.getString("UpdateFound");
         updateDesc = locale.getString("UpdateDesc");

@@ -120,6 +120,13 @@ public class Design extends JFrame {
                         "* JsonUtility <a href=\"https://github.com/najoan125/JsonUtility\">https://github.com/najoan125/JsonUtility</a>\n\tMIT License" +
                         "</pre>" +
                         "</html>";
+        JEditorPane editorPane = getjEditorPane(content);
+
+        panel.add(editorPane);
+        return SwingUtil.getScrollablePanel(panel);
+    }
+
+    private static JEditorPane getjEditorPane(String content) {
         JEditorPane editorPane = new JEditorPane("text/html", content);
         editorPane.setEditable(false);
 
@@ -133,8 +140,6 @@ public class Design extends JFrame {
                 }
             }
         });
-
-        panel.add(editorPane);
-        return SwingUtil.getScrollablePanel(panel);
+        return editorPane;
     }
 }

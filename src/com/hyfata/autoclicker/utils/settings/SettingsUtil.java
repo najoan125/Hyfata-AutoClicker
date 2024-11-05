@@ -76,12 +76,7 @@ public class SettingsUtil {
                     presetNames.add(key);
                 }
                 JSONObject jsonObject = settings.getJSONObject(key);
-                UserSettings.setDelay(jsonObject.optString("delay", "100"));
-                UserSettings.setDelayUnit(jsonObject.optString("delayUnit", "ms"));
-                UserSettings.setMouseButton(jsonObject.optString("mouseButton", "left"));
-                UserSettings.setToggle(jsonObject.optBoolean("toggle", false));
-                UserSettings.setKeycode(jsonObject.optInt("keycode", -1));
-                UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
+                load(jsonObject);
                 savePreset(key);
                 removeKeys.add(key);
             }
@@ -106,6 +101,10 @@ public class SettingsUtil {
     // able to change
     public static void loadPreset(String preset) {
         JSONObject jsonObject = settings.getJSONObject("presets").getJSONObject(preset);
+        load(jsonObject);
+    }
+
+    private static void load(JSONObject jsonObject) {
         UserSettings.setDelay(jsonObject.optString("delay", "100"));
         UserSettings.setDelayUnit(jsonObject.optString("delayUnit", "ms"));
         UserSettings.setMouseButton(jsonObject.optString("mouseButton", "left"));
@@ -114,7 +113,6 @@ public class SettingsUtil {
         UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
         UserSettings.setLimitClick(jsonObject.optInt("limitClick", 0));
     }
-
 
     //must be loaded!
     // able to change
@@ -149,8 +147,6 @@ public class SettingsUtil {
 
         UserSettings.setToggle(AutoClickSettingsUI.getInstance().getHoldToggle().equals(Locale.getKeyToggle()));
 
-        // TODO: limited clicks
-
         if (GlobalKeyListener.keycode == null) {
             UserSettings.setKeycode(-1);
         } else {
@@ -158,6 +154,8 @@ public class SettingsUtil {
         }
 
         UserSettings.setKeyboard(GlobalKeyListener.isKeyboard);
+
+        // TODO: limited clicks
     }
 
     public static void saveFile() throws IOException {

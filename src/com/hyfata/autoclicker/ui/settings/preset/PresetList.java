@@ -13,8 +13,6 @@ public class PresetList {
     private DefaultListModel<String> presetListModel;
     private JScrollPane presetScrollPane;
 
-    private final int minWidth = 140;
-    private final int maxWidth = 400;
     private final int height = 120;
 
     public PresetList() {
@@ -43,6 +41,8 @@ public class PresetList {
     }
 
     public int getWidth() {
+        int maxWidth = 400;
+        int minWidth = 140;
         int width = presetList.getPreferredSize().width;
         if (width >= maxWidth) width = maxWidth;
         return Math.max(width, minWidth);
