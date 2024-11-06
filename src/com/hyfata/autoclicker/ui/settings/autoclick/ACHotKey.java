@@ -9,20 +9,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ACKey {
-    private static ACKey instance;
-
+public class ACHotKey {
     private JButton changeKeyButton, resetButton;
     private final JLabel keyLabel = new JLabel();
     private JDialog changingKeyDialog;
-
-    public ACKey() {
-        instance = this;
-    }
-
-    public static ACKey getInstance() {
-        return instance;
-    }
 
     // must be preset already loaded
     protected void initKeyCode(Integer keyCode) {

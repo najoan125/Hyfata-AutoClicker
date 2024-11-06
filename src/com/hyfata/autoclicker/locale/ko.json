@@ -42,5 +42,6 @@
   "DownloadingUpdateError": "업데이트 다운로드 중 문제 발생!",
   "RunningUpdateFileError": "업데이트 파일 실행 중에 오류가 발생하였습니다. 다운로드 폴더에서 직접 실행해주세요!",
   "SavingSettingsError": "설정을 저장하는 데 오류가 발생했습니다! 개발자에게 Discord로 문의하세요!",
-  "TotalClicks": "총 클릭 횟수 :"
+  "TotalClicks": "총 클릭 횟수 :",
+  "LimitClicks": "작업당 클릭수 제한: "
 }

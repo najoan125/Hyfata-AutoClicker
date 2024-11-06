@@ -1,16 +1,15 @@
-package com.hyfata.autoclicker.ui.settings.autoclick;
+package com.hyfata.autoclicker.utils.settings;
 
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.utils.settings.UserSettings;
 
-public class ACSettings {
-    protected String getDelayUnit() {
+public class AutoClickSettingsUtil {
+    public static String getDelayUnit() {
         if (UserSettings.getDelayUnit().equals("ms"))
             return Locale.getDelayMs();
         return Locale.getDelayMicros();
     }
 
-    protected String getMouseButton() {
+    public static String getMouseButton() {
         switch (UserSettings.getMouseButton()) {
             case "left":
                 return Locale.getMouseLeft();
@@ -22,13 +21,13 @@ public class ACSettings {
         return "";
     }
 
-    protected String getHoldToggle() {
+    public static String getHoldToggle() {
         if (UserSettings.isToggle())
             return Locale.getKeyToggle();
         return Locale.getKeyHold();
     }
 
-    protected Integer getKeycode() {
+    public static Integer getKeycode() {
         if (UserSettings.getKeycode() == -1)
             return null;
         return UserSettings.getKeycode();

@@ -5,8 +5,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
-import com.hyfata.autoclicker.ui.settings.autoclick.ACKey;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
@@ -24,7 +22,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public void nativeKeyPressed(NativeKeyEvent e) {
         int key = e.getKeyCode();
         if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggle();
+            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected();
             if (holdToggle.equals(Locale.getKeyHold())) {
                 toggleAutoClick();
                 isPressed = true;
@@ -55,7 +53,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public void nativeMousePressed(NativeMouseEvent e) {
         int key = e.getButton();
         if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggle();
+            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected();
             if (holdToggle.equals(Locale.getKeyHold())) {
                 toggleAutoClick();
                 isPressed = true;
@@ -89,7 +87,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
             LanguageUI.getInstance().setAllEnabled(true);
             PresetUI.getInstance().setAllEnabled(true);
             AutoClickHandler.stop();
-        } else if (!ACDelay.getInstance().getDelay().equals("0")) {
+        } else if (!AutoClickSettingsUI.getInstance().getDelayUI().getDelay().equals("0")) {
             AutoClickHandler.start();
         }
     }
@@ -98,12 +96,12 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         GlobalKeyListener.isChanging = false;
         GlobalKeyListener.keycode = keycode;
         GlobalKeyListener.isKeyboard = keyboard;
-        ACKey.getInstance().setKeyText(keycode, keyboard);
-        ACKey.getInstance().onKeyChanged();
+        AutoClickSettingsUI.getInstance().getHotKeyUI().setKeyText(keycode, keyboard);
+        AutoClickSettingsUI.getInstance().getHotKeyUI().onKeyChanged();
     }
 
     public void cancelChangeKeyCode() {
         GlobalKeyListener.isChanging = false;
-        ACKey.getInstance().onKeyChanged();
+        AutoClickSettingsUI.getInstance().getHotKeyUI().onKeyChanged();
     }
 }

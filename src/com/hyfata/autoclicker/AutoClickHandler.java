@@ -1,7 +1,6 @@
 package com.hyfata.autoclicker;
 
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.autoclicker.ui.settings.LanguageUI;
 import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
@@ -48,7 +47,7 @@ public class AutoClickHandler {
         init();
         isStart = true;
 
-        long delay = Long.parseLong(ACDelay.getInstance().getDelay());
+        long delay = Long.parseLong(AutoClickSettingsUI.getInstance().getDelayUI().getDelay());
         delay *= 500;
 
         TimeUnit timeUnit = getTimeUnit();
@@ -62,7 +61,7 @@ public class AutoClickHandler {
     } // start()
 
     private static TimeUnit getTimeUnit() {
-        String delayUnit = ACDelay.getInstance().getSelectedUnit();
+        String delayUnit = AutoClickSettingsUI.getInstance().getDelayUI().getSelectedUnit();
         if (Objects.equals(delayUnit, Locale.getDelayMs())) {
             return TimeUnit.MICROSECONDS;
         }
@@ -70,7 +69,7 @@ public class AutoClickHandler {
     }
 
     private static Runnable getRunnable() {
-        String mouseButton = AutoClickSettingsUI.getInstance().getSelectedMouseButton();
+        String mouseButton = AutoClickSettingsUI.getInstance().getMouseButtonUI().getSelected();
         boolean left = mouseButton.equals(Locale.getMouseLeft());
         boolean middle = mouseButton.equals(Locale.getMouseMiddle());
         boolean right = mouseButton.equals(Locale.getMouseRight());

@@ -8,17 +8,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class ACDelay {
-    private static ACDelay instance;
     private JFormattedTextField delay;
     private JComboBox<String> delayUnits;
-
-    public ACDelay() {
-        instance = this;
-    }
-
-    public static ACDelay getInstance() {
-        return instance;
-    }
 
     public void setDelay(int delay) {
         this.delay.setValue(delay);

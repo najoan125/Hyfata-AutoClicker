@@ -2,7 +2,6 @@ package com.hyfata.autoclicker.utils.settings;
 
 import com.hyfata.autoclicker.GlobalKeyListener;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.settings.autoclick.ACDelay;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
 import com.hyfata.json.JsonReader;
 import com.hyfata.json.JsonUtil;
@@ -130,22 +129,22 @@ public class SettingsUtil {
 
     // able to change
     public static void loadCurrentSettings() {
-        UserSettings.setDelay(ACDelay.getInstance().getDelay());
+        UserSettings.setDelay(AutoClickSettingsUI.getInstance().getDelayUI().getDelay());
 
-        if (ACDelay.getInstance().getSelectedUnit().equals(Locale.getDelayMs()))
+        if (AutoClickSettingsUI.getInstance().getDelayUI().getSelectedUnit().equals(Locale.getDelayMs()))
             UserSettings.setDelayUnit("ms");
         else
             UserSettings.setDelayUnit("micros");
 
-        if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseLeft())) {
+        if (AutoClickSettingsUI.getInstance().getMouseButtonUI().getSelected().equals(Locale.getMouseLeft())) {
             UserSettings.setMouseButton("left");
-        } else if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseMiddle())) {
+        } else if (AutoClickSettingsUI.getInstance().getMouseButtonUI().getSelected().equals(Locale.getMouseMiddle())) {
             UserSettings.setMouseButton("middle");
-        } else if (AutoClickSettingsUI.getInstance().getSelectedMouseButton().equals(Locale.getMouseRight())) {
+        } else if (AutoClickSettingsUI.getInstance().getMouseButtonUI().getSelected().equals(Locale.getMouseRight())) {
             UserSettings.setMouseButton("right");
         }
 
-        UserSettings.setToggle(AutoClickSettingsUI.getInstance().getHoldToggle().equals(Locale.getKeyToggle()));
+        UserSettings.setToggle(AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected().equals(Locale.getKeyToggle()));
 
         if (GlobalKeyListener.keycode == null) {
             UserSettings.setKeycode(-1);

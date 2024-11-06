@@ -32,7 +32,7 @@ public class AutoClicker extends JPanel {
 
         try {
             Locale.setLocale(SettingsUtil.getLang());
-        } catch (IOException | JsonEmptyException e) {
+        } catch (JsonEmptyException e) {
             SwingUtil.showErrorDialog(e,"Error loading language file. Contact to developer on discord!", "Error loading language file");
             System.exit(-1);
         }
