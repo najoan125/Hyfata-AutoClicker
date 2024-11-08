@@ -4,7 +4,7 @@ import com.formdev.flatlaf.IntelliJTheme;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.hyfata.autoclicker.locale.Locale;
-import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.ui.UIController;
 import com.hyfata.autoclicker.utils.SwingUtil;
 import com.hyfata.autoclicker.utils.settings.SettingsUtil;
 import com.hyfata.json.exceptions.JsonEmptyException;
@@ -18,7 +18,7 @@ public class AutoClicker extends JPanel {
     public static final String CHECK_URL = "http://132.226.170.151/file/Autoclicker/autoclicker.json";
     public static final String UPDATE_JAR_URL = "https://github.com/najoan125/Hyfata-AutoClicker/releases/download/%s/AutoClicker.jar";
     public static final String UPDATE_EXE_URL = "https://github.com/najoan125/Hyfata-AutoClicker/releases/download/%s/Hyfata.AutoClick.exe";
-    static Design design;
+    static UIController uiController;
 
     public static void main(String[] args){
         IntelliJTheme.setup(AutoClicker.class.getResourceAsStream("theme/arc_theme_dark.theme.json"));
@@ -42,12 +42,12 @@ public class AutoClicker extends JPanel {
     } // main
 
     public static void reload() {
-        design.dispose();
+        uiController.dispose();
         startUI();
     }
 
     private static void startUI() {
-        design = new Design("Hyfata AutoClicker v" + APP_VERSION);
+        uiController = new UIController("Hyfata AutoClicker v" + APP_VERSION);
     }
 
     private static void registerNativeHook() {

@@ -1,6 +1,6 @@
 package com.hyfata.autoclicker.utils;
 
-import com.hyfata.autoclicker.ui.Design;
+import com.hyfata.autoclicker.ui.UIController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +21,9 @@ public class JPanelUtil {
         int i = 0;
         for (JPanel p : panels) {
             p.setLayout(new FlowLayout(flowLayout));
-            p.setPreferredSize(new Dimension(Design.WIDTH, height));
+            p.setPreferredSize(new Dimension(UIController.WIDTH, height));
             if (addedHeights.containsKey(i)){
-                p.setPreferredSize(new Dimension(Design.WIDTH,height+addedHeights.get(i)));
+                p.setPreferredSize(new Dimension(UIController.WIDTH,height+addedHeights.get(i)));
             }
             panel.add(p);
 

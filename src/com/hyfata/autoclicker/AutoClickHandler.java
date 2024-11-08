@@ -118,13 +118,14 @@ public class AutoClickHandler {
             clicks.incrementAndGet();
             limitClicks.incrementAndGet();
         } else {
-            r.mouseRelease(button);
             clicked.set(false);
-
             if (limit > 0 && limitClicks.get() >= limit) {
                 GlobalKeyListener.blockReleaseOnce = true;
                 stop();
+                return;
             }
+            r.mouseRelease(button);
+
         }
     }
 }

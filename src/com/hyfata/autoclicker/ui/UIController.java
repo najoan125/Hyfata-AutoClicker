@@ -18,7 +18,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class Design extends JFrame {
+public class UIController extends JFrame {
     public static final int WIDTH = 450, HEIGHT = 360;
     private static Component aboutPanel = null;
 
@@ -49,7 +49,7 @@ public class Design extends JFrame {
         });
     }
 
-    public Design(String title) {
+    public UIController(String title) {
         init(title);
         design();
         setVisible(true);
@@ -126,7 +126,7 @@ public class Design extends JFrame {
         return SwingUtil.getScrollablePanel(panel);
     }
 
-    private static JEditorPane getjEditorPane(String content) {
+    private JEditorPane getjEditorPane(String content) {
         JEditorPane editorPane = new JEditorPane("text/html", content);
         editorPane.setEditable(false);
 
