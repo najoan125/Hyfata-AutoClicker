@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class Design extends JFrame {
-    public static final int WIDTH = 450, HEIGHT = 340;
+    public static final int WIDTH = 450, HEIGHT = 360;
     private static Component aboutPanel = null;
 
     private void init(String title) {

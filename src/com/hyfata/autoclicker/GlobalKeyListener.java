@@ -6,8 +6,6 @@ import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
 import com.github.kwhat.jnativehook.mouse.NativeMouseListener;
 import com.hyfata.autoclicker.locale.Locale;
 import com.hyfata.autoclicker.ui.settings.autoclick.AutoClickSettingsUI;
-import com.hyfata.autoclicker.ui.settings.LanguageUI;
-import com.hyfata.autoclicker.ui.settings.preset.PresetUI;
 
 public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener {
     private boolean isPressed = false;
@@ -15,28 +13,20 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
     public static boolean isKeyboard = true;
     public static boolean isChanging = false;
     public static boolean shouldBlocked = false;
+    public static boolean blockReleaseOnce = false;
     public static Integer keycode = null;
 
     //keyboard
     @Override
     public void nativeKeyPressed(NativeKeyEvent e) {
         int key = e.getKeyCode();
-        if (!isPressed && !isChanging && isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected();
-            if (holdToggle.equals(Locale.getKeyHold())) {
-                toggleAutoClick();
-                isPressed = true;
-            }
-        }
+        onPressed(key, true);
     }
 
     @Override
     public void nativeKeyReleased(NativeKeyEvent e) {
         int key = e.getKeyCode();
-        if (keycode != null && key == keycode && !isChanging && isKeyboard && !shouldBlocked) {
-            toggleAutoClick();
-            isPressed = false;
-        }
+        onReleased(key, true);
 
         if (isChanging) {
             if (key == NativeKeyEvent.VC_ESCAPE) {
@@ -46,29 +36,19 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
             }
         }
     }
-    //keyboard
 
     //mouse
     @Override
     public void nativeMousePressed(NativeMouseEvent e) {
         int key = e.getButton();
-        if (!isPressed && !isChanging && !isKeyboard && keycode != null && key == keycode && !shouldBlocked) {
-            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected();
-            if (holdToggle.equals(Locale.getKeyHold())) {
-                toggleAutoClick();
-                isPressed = true;
-            }
-        }
+        onPressed(key, false);
     }
 
 
     @Override
     public void nativeMouseReleased(NativeMouseEvent e) {
         int key = e.getButton();
-        if (keycode != null && key == keycode && !isChanging && !isKeyboard && !shouldBlocked) {
-            toggleAutoClick();
-            isPressed = false;
-        }
+        onReleased(key, false);
 
         if (isChanging) {
             if (key == 1) {
@@ -79,20 +59,30 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         }
     }
 
-    //mouse
-    private void toggleAutoClick() {
-        if (AutoClickHandler.isStart) {
-            AutoClickHandler.isStart = false;
-            AutoClickSettingsUI.getInstance().setAllEnabled(true);
-            LanguageUI.getInstance().setAllEnabled(true);
-            PresetUI.getInstance().setAllEnabled(true);
-            AutoClickHandler.stop();
-        } else if (!AutoClickSettingsUI.getInstance().getDelayUI().getDelay().equals("0")) {
-            AutoClickHandler.start();
+    private void onPressed(int key, boolean keyboard) {
+        if (!isPressed && !isChanging && isKeyboard == keyboard && keycode != null && key == keycode && !shouldBlocked) {
+            isPressed = true;
+            blockReleaseOnce = false;
+
+            String holdToggle = AutoClickSettingsUI.getInstance().getHoldToggleUI().getSelected();
+            if (holdToggle.equals(Locale.getKeyHold())) { // hold only
+                AutoClickHandler.toggleAutoClick();
+            }
         }
     }
 
-    public void changeKeyCode(int keycode, boolean keyboard) {
+    private void onReleased(int key, boolean keyboard) {
+        if (keycode != null && key == keycode && !isChanging && isKeyboard == keyboard && !shouldBlocked) {
+            isPressed = false;
+            if (blockReleaseOnce) {
+                blockReleaseOnce = false;
+                return;
+            }
+            AutoClickHandler.toggleAutoClick();
+        }
+    }
+
+    private void changeKeyCode(int keycode, boolean keyboard) {
         GlobalKeyListener.isChanging = false;
         GlobalKeyListener.keycode = keycode;
         GlobalKeyListener.isKeyboard = keyboard;
@@ -100,7 +90,7 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseListener
         AutoClickSettingsUI.getInstance().getHotKeyUI().onKeyChanged();
     }
 
-    public void cancelChangeKeyCode() {
+    private void cancelChangeKeyCode() {
         GlobalKeyListener.isChanging = false;
         AutoClickSettingsUI.getInstance().getHotKeyUI().onKeyChanged();
     }

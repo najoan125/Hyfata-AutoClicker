@@ -50,14 +50,16 @@ public class PresetUI {
         PresetList presetList = new PresetList();
         JPanel panel = presetList.createPanel();
         panelUtil.register(panel);
-        panelUtil.addHeight(110);
+        panelUtil.addHeight(130);
     }
 
     private void editPreset() {
         JPanel panel = new JPanel();
-        plus = PresetEditButton.newPlusButton();
-        delete = PresetEditButton.newDeleteButton();
-        rename = PresetEditButton.newRenameButton();
+        PresetEditButton presetEditButton = new PresetEditButton();
+
+        plus = presetEditButton.newPlusButton();
+        delete = presetEditButton.newDeleteButton();
+        rename = presetEditButton.newRenameButton();
 
         panel.add(plus);
         panel.add(delete);

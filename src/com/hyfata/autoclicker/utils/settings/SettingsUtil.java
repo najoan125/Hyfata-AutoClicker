@@ -94,7 +94,7 @@ public class SettingsUtil {
         UserSettings.setToggle(false);
         UserSettings.setKeycode(-1);
         UserSettings.setKeyboard(false);
-        UserSettings.setLimitClick(0);
+        UserSettings.setLimitClick("0");
     }
 
     // able to change
@@ -110,7 +110,7 @@ public class SettingsUtil {
         UserSettings.setToggle(jsonObject.optBoolean("toggle", false));
         UserSettings.setKeycode(jsonObject.optInt("keycode", -1));
         UserSettings.setKeyboard(jsonObject.optBoolean("keyboard", false));
-        UserSettings.setLimitClick(jsonObject.optInt("limitClick", 0));
+        UserSettings.setLimitClick(jsonObject.optString("limitClick", "0"));
     }
 
     //must be loaded!
@@ -154,7 +154,7 @@ public class SettingsUtil {
 
         UserSettings.setKeyboard(GlobalKeyListener.isKeyboard);
 
-        // TODO: limited clicks
+        UserSettings.setLimitClick(AutoClickSettingsUI.getInstance().getLimitUI().getLimit());
     }
 
     public static void saveFile() throws IOException {

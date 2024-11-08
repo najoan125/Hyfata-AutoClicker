@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AutoClickHandler {
-    //Robot 객체 생성
     private static final Robot r;
     static {
         try {
@@ -25,14 +24,23 @@ public class AutoClickHandler {
             throw new RuntimeException(e);
         }
     }
-    //짧은 시간 동안 딜레이를 주기 위한 라이브러리
-    private static ScheduledExecutorService macroExecutor = Executors.newSingleThreadScheduledExecutor();
-    private static final AtomicBoolean clicked = new AtomicBoolean(false);
-    private static int macroButton;
 
-    public static boolean isStart = false; //자동 클릭 매크로 작동 여부
-    public static final AtomicInteger clicks = new AtomicInteger(0); //클릭 수
-    public static final AtomicInteger limitClicks = new AtomicInteger(0); // limited clicks
+    private static ScheduledExecutorService macroExecutor = Executors.newSingleThreadScheduledExecutor();
+
+    private static final AtomicBoolean clicked = new AtomicBoolean(false);
+    private static final AtomicInteger limitClicks = new AtomicInteger(0); // limited clicks
+    private static int macroButton;
+    private static boolean isStart = false;
+
+    public static final AtomicInteger clicks = new AtomicInteger(0);
+
+    public static void toggleAutoClick() {
+        if (isStart) {
+            stop();
+        } else if (!AutoClickSettingsUI.getInstance().getDelayUI().getDelay().equals("0")) {
+            start();
+        }
+    }
 
     private static void init() {
         limitClicks.set(0);
@@ -43,7 +51,7 @@ public class AutoClickHandler {
         macroExecutor = Executors.newSingleThreadScheduledExecutor();
     }
 
-    public static void start() {
+    private static void start() {
         init();
         isStart = true;
 
@@ -84,19 +92,26 @@ public class AutoClickHandler {
             macroButton = 0;
         }
 
+        int limit = Integer.parseInt(AutoClickSettingsUI.getInstance().getLimitUI().getLimit());
+
         if (macroButton != 0) {
-            return () -> startMacro(macroButton);
+            return () -> startMacro(macroButton, limit);
         }
         return null;
     }
 
-    public static void stop() {
+    private static void stop() {
+        isStart = false;
+        AutoClickSettingsUI.getInstance().setAllEnabled(true);
+        LanguageUI.getInstance().setAllEnabled(true);
+        PresetUI.getInstance().setAllEnabled(true);
+
         macroExecutor.shutdown();
         r.mouseRelease(macroButton);
     }
 
     //자동 클릭 매크로 실행(메서드 반복)
-    private static void startMacro(int button) {
+    private static void startMacro(int button, int limit) {
         if (!clicked.get()) {
             r.mousePress(button);
             clicked.set(true);
@@ -105,7 +120,11 @@ public class AutoClickHandler {
         } else {
             r.mouseRelease(button);
             clicked.set(false);
-            // TODO: if current click is reached limited click, run stop()
+
+            if (limit > 0 && limitClicks.get() >= limit) {
+                GlobalKeyListener.blockReleaseOnce = true;
+                stop();
+            }
         }
     }
 }

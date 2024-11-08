@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PresetEditButton {
-    protected static JButton newPlusButton() {
+    protected JButton newPlusButton() {
         JButton plus = new JButton("+");
         plus.setPreferredSize(new Dimension(25, 25));
         plus.setFont(plus.getFont().deriveFont(20.0f));
@@ -15,7 +15,7 @@ public class PresetEditButton {
         return plus;
     }
 
-    protected static JButton newDeleteButton() {
+    protected JButton newDeleteButton() {
         JButton delete = new JButton("-");
         delete.setPreferredSize(new Dimension(25, 25));
         delete.setFont(delete.getFont().deriveFont(20.0f));
@@ -24,7 +24,7 @@ public class PresetEditButton {
         return delete;
     }
 
-    protected static JButton newRenameButton() {
+    protected JButton newRenameButton() {
         JButton rename = new JButton(Locale.getRename());
         rename.addActionListener(e -> PresetButtonListener.renameListener());
         return rename;

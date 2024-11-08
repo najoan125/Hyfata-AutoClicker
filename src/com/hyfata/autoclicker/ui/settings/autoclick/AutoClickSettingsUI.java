@@ -18,6 +18,7 @@ public class AutoClickSettingsUI extends JFrame {
     private final JLabel clicks = new JLabel();
 
     private final ACDelay delayUI = new ACDelay();
+    private final ACLimitClicks limitUI = new ACLimitClicks();
     private final ACHotKey hotKeyUI = new ACHotKey();
     private final ACMouseButton mouseButtonUI = new ACMouseButton();
     private final ACHoldToggle holdToggleUI = new ACHoldToggle();
@@ -45,6 +46,7 @@ public class AutoClickSettingsUI extends JFrame {
         executorService.scheduleAtFixedRate(this::calculateClicks, 0, 10, TimeUnit.MILLISECONDS); // refresh ui
 
         delay(Integer.parseInt(UserSettings.getDelay()), AutoClickSettingsUtil.getDelayUnit());
+        limitClicks(Integer.parseInt(UserSettings.getLimitClick()));
         mouseButton(AutoClickSettingsUtil.getMouseButton());
         holdToggle(AutoClickSettingsUtil.getHoldToggle());
 
@@ -57,6 +59,7 @@ public class AutoClickSettingsUI extends JFrame {
     public void reload() {
         delayUI.setDelay(Integer.parseInt(UserSettings.getDelay()));
         delayUI.setUnit(AutoClickSettingsUtil.getDelayUnit());
+        limitUI.setLimit(Integer.parseInt(UserSettings.getLimitClick()));
         mouseButtonUI.setSelected(AutoClickSettingsUtil.getMouseButton());
         holdToggleUI.setSelected(AutoClickSettingsUtil.getHoldToggle());
 
@@ -89,10 +92,12 @@ public class AutoClickSettingsUI extends JFrame {
         panelUtil.register(panel);
     }
 
-    private void limitClicks() {
+    private void limitClicks(int defaultLimit) {
         JPanel panel = new JPanel();
         panel.add(Box.createHorizontalStrut(10));
         panel.add(new JLabel(Locale.getLimitClicks()));
+        panel.add(limitUI.createTextField(defaultLimit));
+        panelUtil.register(panel);
     }
 
     private void mouseButton(String button) {
@@ -131,6 +136,7 @@ public class AutoClickSettingsUI extends JFrame {
 
     public void setAllEnabled(boolean bool) {
         delayUI.setAllEnabled(bool);
+        limitUI.setAllEnabled(bool);
         hotKeyUI.setAllEnabled(bool);
         mouseButtonUI.setEnabled(bool);
         holdToggleUI.setEnabled(bool);
@@ -138,6 +144,10 @@ public class AutoClickSettingsUI extends JFrame {
 
     public ACDelay getDelayUI() {
         return delayUI;
+    }
+
+    public ACLimitClicks getLimitUI() {
+        return limitUI;
     }
 
     public ACHotKey getHotKeyUI() {

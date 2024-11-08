@@ -13,7 +13,7 @@ public class PresetList {
     private DefaultListModel<String> presetListModel;
     private JScrollPane presetScrollPane;
 
-    private final int height = 120;
+    private final int height = 140;
 
     public PresetList() {
         instance = this;
